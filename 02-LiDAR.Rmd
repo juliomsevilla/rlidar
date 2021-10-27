@@ -5,6 +5,24 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = 'c:/curso_lidar/')
 ```
 
+## La teledetección y la tecnología LiDAR
+
+Teledetección es la técnica que permite obtener información a distancia de objetos sin que exista un contacto material (por ejemplo una fotografía). Generalmente se aplica a objetos situados sobre la superficie terrestre y coloquialmente es sinónimo de información a partir de imágenes de satélite
+
+-   Teledetección pasiva: detectan radiación natural emitida o reflejada por el objeto o área circundante que está siendo observada. La luz solar reflejada es uno de los tipos de radiación más comunes medidos por esta clase de teledetección.
+
+    Se necesita una fuente de energía, un objeto y un sensor teledetector. El primero "ilumina" el objetivo emitiendo una onda electromagnética (flujo de fotones) y el último mide la energía solar (es decir la radiación electromagnética) reflejada por el objetivo. Cuando la fuente de energía es el Sol, y el captador solo mide la radiación reflejada, se conoce como teledetección pasiva.
+
+    ![]([https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/pasiva.png)](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/markdown.png))
+
+-   Teledetección activa: emiten energía que les permite "escanear" objetos y áreas. El sistema mide la radiación reflejada del objetivo.
+
+    ![]([[https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/activa.png)](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/pasiva.png))](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/markdown.png))
+
+    -   Radar. Teledetector activo que mide el tiempo que tarda una emisión en ir y volver de un punto, estableciendo así la localización, altura, velocidad y dirección de un objeto determinado.
+
+    -   LiDAR (Light Detection and Ranging o Laser Imaging Detection and Ranging). Dispositivo que permite determinar la distancia desde un emisor láser a un objeto o superficie utilizando un haz láser pulsado.
+
 ## Preparación del entorno de trabajo
 
 Cargamos las librerias
