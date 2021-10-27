@@ -1,0 +1,96 @@
+# Estructuras de control {#structures}
+
+## Introducción
+Las estructuras de control en R nos permiten automatizar los flujos de programación y las secuencias de comandos, haciendo que trabajos reiterativos sena más sencillos y abordables (no confundir con las funciones, que se abordarán en el capítulo \@ref(functions)).
+
+Las estructuras de control más utilizadas son:
+
+- `if / else`: el fragmenteo se ejecutará o no en función de una condición.
+- `for`: se ejecuta un bucle de forma definida según un número determinado de ocasiones.
+- `while`: ejecuta un bucle mientras sea verdadera una condición.
+
+Junto a ellas, debemos tener presentes otras de uso menor como:
+
+- `repeat`: el bucle se ejecutará indefinidamente hasta que lo detengamos con `break`. 
+- `next`: salta a la siguiente ejecución de un bucle.
+
+##`if/else`
+Como se ha dicho, esta estructura de control se ejecutara o no, en función de que se cumpla una determinada condición. De forma esquemática:
+
+```{r eval=FALSE}
+if(<condicion>) {
+  ## bloque de código
+}
+```
+
+O, en el caso de que queramos que se ejecute algo distinto  a que condición nos marca, podremos hacer:
+
+```{r eval=FALSE}
+if(<condicion>) {
+  ## bloque de código
+} else {
+  ## otro bloque de código
+}
+
+```
+
+Tambien podremos anidarlos:
+
+```{r eval=FALSE}
+if(<condicion1>) {
+  ## bloque de código
+} else if(<condicion2>) {
+  ## otro bloque de código
+} else {
+  ## otro bloque de código
+}
+```
+
+Veamos un ejemplo muy simple:
+
+```{r eval=FALSE}
+x <- runif(1, 0, 10)
+if(x > 3) {
+  y <- TRUE
+} else {
+  y <- FALSE
+}
+```
+
+El anterior comando genera un objeto `x` cuyo valor se obtiene de forma aleatoria entre 0 y 10. A continaución hacemos nuestro bucle: si `x` es mayor de 3, se creará un objeto `y` con valor `TRUE`, mientras que si no es así, `y` tomará el valor `FALSE`.
+
+## `while`
+A diferencia de el anterior con `while` comemza comprobando una condición: si esta es verdadera, entonces se comienza con el bucle. Una vez completada una ejecución de este bloque, se comprueba la condición nuevamente y así sucesivamente hasta que la comprobación de la condición de falso. Veamos su forma:
+```{r eval=FALSE}
+while(<condicion>) {
+  # código
+}
+```
+A modo de ejemplo:
+```{r}
+i <- 1
+while (i < 6) {
+print(i)
+i = i+1
+}
+```
+
+
+## `for`
+Los bucles `for` son, con diferencia y por su versatilidad, los más utilizados en R. En este caso, estos toman el valor que se asigna a partir de los elementos de un objeto (generalmente listas) y, de forma sucesiva, van ejecutando los ciclos. Esquemáticamente:
+```{r eval=FALSE}
+for(<variable> in <objeto iterable>) {
+  # código a ejecutar
+}
+```
+
+Por ejemplo:
+```{r}
+for(i in 1:5){
+  print(i)
+} 
+  
+```
+
+Finalmente indicar que, como el anterior, podremos anidar unos dentro de otros.
+

@@ -1,0 +1,243 @@
+# Manejo de datos en R {#data}
+
+## Tipos de datos
+El dato en R es un concepto distinto al que estamos acostumbrados a tratar en Estadística Aplicada y se debe entender como el resultado de ejecutar una determinada expresión, es decir, es un objeto.
+
+En otros, los tipos de datos (objetos) fundamentales de R son:
+
+ - Vectores. Conjunto de elementos en un determinado orden.
+ - Factores. Vector donde sus elementos provienen de un número finito de categorías.
+ - Matrices. Estructura de datos bidimensional de valores de igual tipo
+ - Listas. Estructura de datos más amplia que y puede contener colecciones arbitrarias de datos
+ - data.frame. Estructura de datos bidimensional de elementos, cuyas columnas pueden estar formadas por elementos de distinto tipo
+
+Como vemos unos se diferencian de otros en función de los tipos de elementos que contienen. Estos elementos poseen distintos atributos, pero de ellos, para nuestros propósitos hemos de destacar el modo. En concreto, en R, distinguimos cuatro modos:
+
+ - Lógico o modo binario, verdadero o falso (T o F, respectivamente)
+ - Númerico, donde los valores posibles son números reales
+ - Complejo, donde los valores posibles son números complejos
+ - Carácter, donde los valores son caracteres (separados por comillas)
+ - Fechas, definidas en formato "2015-06-25" o "2015-06-25 15:15" 
+
+### Vectores
+Es uno de los tipos de datos más utilizados. Como regla ineludible es que sus elementos sean del mismo modo.
+
+Su creación se realiza a través de la función `c` (del inglés *concatenate*), siguiendo la siguiente estructura:
+```{r}
+x<-c(118, 160, 64, 138, 168, 140, 109, 135, 220, 180, 151, 129, 117, 121, 86, 170, 62, 104, 184)
+z<-c("a", "a", "b", "c", "a", "c", "b", "a", "c", "b", "c", "c", "b", "b", "a", "a", "a", "b", "c")
+w<-c(5:-7)
+w
+```
+El trabajo con objetos de R tiene grandes ventajas. Una de ellas es el crear datos a partir de otros o ejecutar operaciones con ellos.
+```{r}
+x1<-c(118, 160, 64, 138, 168)
+x2<-c(140, 109, 135, 220, 180)
+x3<-c(x1, 140, 109, 135, 220, 180, 151, 129, 117, 121, 86, 170, 62, 104, 184)
+x1*x2
+(x1^2)/(x2)
+```
+Si, deseamos saber las características del vector creado, podemos usar funciones como las siguientes:
+```{r}
+mode(x)
+length(x)
+```
+Otras funciones útiles son las que se enumeran a continuación:
+```{r}
+is.numeric(x) #Pregunta si es numérico
+class(x) #Indica el tipo de valor
+nchar(z) # Cuenta el número de caracteres
+```
+### Factores
+Los factores son uno de los tipos de datos más importantes en Estadística Aplicada. Su definición en R es muy sencilla y se hace con la instrucción siguiente (nos apoyaremos en el vector z, anteriormente creado):
+```{r}
+f<-as.factor(z)
+```
+Existen comandos asociados a los factores bastante útiles. De ellos destaca `levels`, que nos indica los niveles del factor:
+```{r}
+levels(f)
+```
+
+## Valores perdidos y nulos
+El tratamiento de estos tipos de valores es muy simple en R. Los valores perdidos se definen como `NA` y a diferencia de un valor nulo,`NULL`, implica la existencia de valor. Esto se puede ver fácilmente con el siguiente comando:
+```{r}
+s<-c(1, NA, 3, 4)
+r<-c(1, NULL, 3, 4)
+s
+r
+length(s)
+length(r)
+```
+Si contamos con valores perdidos, es de vital importancia no tratarlos en nuestros análisis. Para ello, usaremos el comando `na.rm=T`:
+```{r}
+mean(s)
+mean(s, na.rm=T)
+```
+Para finalizar, en R, hemos de evitar confundir `NA` con `NaN`. Mientras el primero, como hemops indicado responde a la inexitencia de valor, el segundo representa las siglas "Not a Number", siendo arrojado por el porgrama cuando el resultado de un determinado cálculo así lo sea.
+```{r}
+sqrt(-23)
+0/0
+```
+### Gestión de valores `NA`
+Cuando cargamos un fichero de datos que contiene datos vacios, podremos transformarlos a `NA` usando el comando `na.strings=""` poniendo dentro de las comillas el valor que represente ese dato vacio (si efectivamente el vacio lo es, lo podremos indicar no poniendo nada dentro de estas comillas).
+```{r message=F, warning=F}
+library(RCurl)
+data <- read.table(
+  text=getURL("https://gitlab.com/juliomsevilla/Rintro/raw/master/data/parcna.txt"), na.strings="na", header=TRUE)
+
+```
+En ocasiones podríamos querer despreciar esos casos que contienen valores `NA`: lo haremos facilmente con la sentencia `na.omit()`.
+```{r}
+data_clean<-na.omit(data) #Observemos que se ha reducido el número de registros respecto al objeto data
+```
+Hagamos algo más complejo: quedemosnos con aquellos registros donde no existan `NA` en un determinado campo `myfield` (usaremos `!` que es el indicador de negación, el concepto `is.na` y los corchetes para señalizar filas y/o columnas).
+```{r}
+new_data<-data[!is.na(data$COMARCA),]
+```
+Parecido a lo anterior, si quisieramos quedarnos solo con los registros completos, es decir, con solo aquellos que no tienen `NA`en ninguna columna, podríamos hacer:
+```{r}
+new_data.2<-data[complete.cases(data),]
+```
+Finalmente, si quisieramos convertir un determinado valor a `NA` podríamos ejecutar:
+```{r}
+data$AB[data$HD==0]<-NA
+```
+#### Reemplazar valores `NA` con parámetros de la muestra
+Como se ha dicho anteriormente, al calcular parámetros de nuestra muestra y contar con valores `NA` el resultado será `NA` salvo que le indiquemos que no lo tenga en cuenta con `na.rm`. De esta forma, evitaremos el error, pero, por contra, perderemos registros de nuestro `data.frame` si este cuenta con más.
+
+Por ello, en ocasiones es adecuado reemplazar esos valores con el parámetro que estemos calculando:
+```{r}
+data$NC<-ifelse(is.na(data$NC), 
+                         mean(data$NC, na.rm = TRUE),
+                         data$NC)
+```
+
+Esta opción es adecuada para variables continuas. En el caso de variables categóricas, podemos asignar un valor aleatorio, de todos los posibles con los que contamos en ese caso.
+```{r}
+rand.impute<-function(x){ # x es un vector de datos que puede contener NA
+  missing<-is.na(x) # missing es un vector que contiene TRUE o FALSE en función de que x sea NA o no
+  n.missing<-sum(missing) #sumamos missing y obtenemos el número de verdaderos y por tanto obtenemos cuantos NA tenemos
+  x.obs<-x[!missing] # Obtenemos que datos tienen valor diferente de NA en x, es decir, me quedo con los que no son NA
+  imputed<-x
+  imputed[missing]<-sample(x.obs, n.missing, replace = TRUE) #Extraemos una muestra aleatoria de los datos que conocemos, x.obs, de un tamaño n.missing, y los asignamos a los que no conocemos
+  return (imputed)
+}
+
+random.impute.dataframe<- function(dataframe, cols) {
+  names<-names(dataframe)
+  for (col in cols){
+    name<-paste(names[col], ".imputed", sep="")
+    dataframe[name]=rand.impute(dataframe[,col])
+  }
+
+}
+data2<-data
+random.impute.dataframe(data2,c(1,3))
+```
+#### Eliminar registros `NA`
+Las más de las veces, querremos eliminar los datos `NA`. Para ello, haremos uso del comando `na.omit`:
+```{r}
+data_na.omit<-na.omit(data)
+```
+
+
+## Registros duplicados
+La gestión de los registros duplicados es muy sencilla en R con la función `unique()`
+```{r}
+data2<-unique(data)
+```
+
+## Reescalado
+Para que funcionen mejor muchos algoritmos, hay que normalizar las variables de entrada al algoritmo. Por Normalizar conocemos la técnica que nos permite comprimir o extender los valores de la variable para que estén en un rango definido. Asímismo, es bastante interesante usar esta técnica con variables con dispersiones muy grandes (es decir con valores muy elevados y muy pequeños). El trabajo de normalización se puede realizar facilmente con la libreria `scales` [@R-scales]
+```{r message=F, warning=F}
+library(scales)
+data$VSC.rescaled<-rescale(data$VSC) 
+#El valor más pequeño tomará el valor cero y el más alto tomará el valor uno. El resto se escala de forma líneal:
+data$VSC.rescaled.manual<-(data$VSC-min(data$VSC))/(max(data$VSC)-min(data$VSC))
+data$VSC.rescaled.100<-rescale(data$VSC, to=c(0,100)) 
+```
+En el caso que quisieramos reescalar varias columnas, podríamos hacer uso de un bucle:
+
+```{r}
+rescale.all<-function(dataframe, cols){
+  names<-names(dataframe)
+  for (col in cols){
+    name<-paste(names[col], "rescaled", sep=".")
+    dataframe[name]<-rescale(dataframe[,col])
+  }
+  dataframe
+}
+
+data2<-data
+data2<-rescale.all(data2, c(4,5))
+```
+## Normalizado y estandarizado
+Las más de las veces realizamos pruebas, modelos o simplemente estimamos valores de parámetros en los que es obligatoria la existencia de normalidad en nuestros datos. Se entiende por variable normal aquella cuya distribución de probabilidad se ajusta una curva acampanada en la que la media aritmética, la mediana y la moda de la distribución son iguales y se localizan en el pico. Así, la mitad del área bajo la curva se encuentra a la derecha de este punto central y la otra mitad está a la izquierda de dicho punto. 
+
+No es la única función de distribución, pero si es la más común y una de sus características más importantes es que casi cualquier distribución de probabilidad, tanto discreta como continua, se puede aproximar por una normal bajo ciertas condiciones. Por ello, la mayoría de los estdísticos más rutinarios exigen la existencia de normalidad para validar las hipótesis.
+
+El análisis de la normalidad se puede hacer de una forma rudimentaria comprobando si la media, mediana y moda son "iguales" o de una forma más compleja a raíz de pruebas de hipótesis como la de Kolmogorov-Smirnov o el test de Shapiro. Asimismo, gráficamente, representando el histograma de frecuencias o con gráficos de cajas (box-plot) podremos comprobar su cumplimiento.
+
+En R, estas pruebas forman parte del núcleo del software, usándose los siguientes comandos para comprobarla:
+```{r}
+
+mean(data$VSC) # Media aritmética
+median(data$VSC) # Mediana
+
+shapiro.test(data$VSC) #Test de Shapiro (para pruebas con más de 50 datos)
+ks.test(data$VSC, "pnorm", mean(data$VSC), sd(data$VSC)) # Test de Kolmogorov
+par(mfrow=c(2,2)) # Representación gráfica
+plot(data$VSC)
+hist(data$VSC)
+boxplot(data$VSC)
+qqnorm(data$VSC)
+par(mfrow=c(1,1)) 
+```
+
+Muchas veces la no existencia de normalidad puede ser solucionada con una transformación de los datos. La transformación consiste en aplicar una determinada operación matemática, de forma que una vez aplicada la variable alcance cierto grado de normalidad. En general con variables cuya distribución esté sesgada a la izquierda, la normalidad se puede alcanzar con aplicando el logaritmo neperiano de la misma (así comprimiremos la cola de la izquierda y extenderemos la de la derecha.). Si, por el contrario, la distribución está sesgada a la derecha, la aplicación de una raíz cuadrada puede solucionar el problema.
+
+Otras veces, el alcanzar la normalidad no es tan sencillo y es necesario utilizar transformación en las que entran en juego potencias. En este sentido destaca la conocida tranformación planteada por Box y Cox. En R su consecución se realiza a partir de la aplicación de librería `car` [@R-car]
+```{r message=F, warning=F}
+library(car)
+
+summary(powerTransform(data$VSC))
+
+```
+
+La variable transformada será `(-1+datos^"Est.Power")/("Est.Power")`:
+
+```{r}
+data$VSC.transform<-(-1+data$VSC^0.4838)/(0.4838)
+par(mfrow=c(2,2)) # Representación gráfica
+plot(data$VSC.transform)
+hist(data$VSC.transform)
+boxplot(data$VSC.transform)
+qqnorm(data$VSC.transform)
+par(mfrow=c(1,1)) 
+```
+
+Finalmente, en ocasiones nos interesará estandarizar (o tipificar) nuestras variables, esto es, que nuestra variable se convierta en otra con una distribución de media cero y desviación típica 1. Esto se consigue facilmente con el comando `scale()`.
+
+```{r}
+data$VSC.tip<-scale(data$VSC)
+mean(data$VSC.tip)
+sd(data$VSC.tip)
+```
+
+## Categorizar los datos
+Muchas veces nos interesará categorizar los datos en rangos en función a un valor numérico. Para ellos, haremos uso de la función `cut`:
+```{r}
+cortes.num<-c(-Inf, 16, 25, 40, Inf)
+cortes.label<-c("bajo", "medio", "alto", "muy alto")
+data$VSC.cat<-cut(data$VSC, breaks = cortes.num, labels = cortes.label)
+```
+Siguiendo con lo anterior, al realizar ciertos análisis como los de regresión, la variable dependiente y las independientes no solamente pueden estar dadas por variables cuantitativas: existen otros tipos de variables de carácter cualitativo. Dichas variables se conocen comúnmente como variables dummy y usualmente, dichas variables indican la presencia o ausencia de una cualidad o atributo, tomando valor de 1 en una submuestra y 0 en el resto de la muestra. 
+
+La gestión de este tipo de variables podemos hacerlo con la libreria `dummies` [@R-dummies].
+```{r message=F, warning=F}
+library(dummies)
+data.dummy<-dummy.data.frame(data, sep=".")
+head(data.dummy)
+data.dummy2<-dummy.data.frame(data, names=c("COMARCA"), sep=".") # Solo lo aplicamos a una o varias variables en vez de a todas las categóricas del data.frame
+head(data.dummy2)
+```

@@ -1,0 +1,61 @@
+# Funciones {#functions}
+## Las funciones en R
+Generalmente nuestros análisis consisten en una secuencia de comandos de R (posiblemente insertados dentro de un fichero `.Rmd`) que se ejecutan secuencialmente. En ocasiones, sin embargo, es conveniente crear funciones, por ejemplo, cuando hay operaciones comunes que se realizan reiteradamente (incluso en análisis distintos). Estas funciones podríamos equipararlas a las tan conocidas *macros*.Estas funciones en R requieren una bibliografía específica y son un capítulo aparte dentro de este lenguaje de programación, por lo que solo vamos a dar unas pinceladas para que se entiendan las funciones que se han plasmado a lo largo de este manual.
+
+Las funciones en R son tratadas como cualquier otro objeto y para crearlas utilizamos el comando `function()`, el cual creará un objeto de tipo `function`, para, a continuación llamarla, escribiendo el nombre de la misma. La estructura básica es la siguiente
+
+```{r eval=FALSE}
+f <- function(argumentos) 
+{
+  ## comandos de la función (body)
+}
+```
+
+Veamos un ejemplo:
+
+```{r}
+f <- function() 
+{
+  cat("Hola Mundo")
+}
+
+f()
+```
+
+En este punto ya habremos llegado a la conclusión de donde está el final del camino de las funciones: sí, en los paquetes. Un paquete no es más que un conjunto de funciones, ordenadas y estandarizadas, de tal forma que puedan ser replicables en todos nuestros análisis, y, si así lo decidimos que otros puedan usarlas si las compartimos libremente.
+
+## Estructura de una función
+Las funciones en R se componen de tres partes fundamentales:
+
+- el cuerpo (body),
+- los argumentos (formals) y
+- el ambiente (environment)
+
+```{r eval=FALSE}
+f <- function(x, y) { x + y }
+
+body(f)
+{
+ x + y
+}
+
+formals(f)
+$x
+$y
+
+
+environment(f)
+<environment: R_GlobalEnv>
+```
+
+El cuerpo es la sucesión de códigos y comandos que la función ejecutará para realizar los propósitos que le pedimos, mientras que los argumentos son una serie de valores que se le pasan a la función de forma que ciertas variables dentro de la función tomen diversos valores. Ambios son obligatorios para confeccionar nuestra función. Es importante indicar que el orden con el que se incluyan en la declaración de la variables es como se ubicarán en la función:
+
+```{r}
+area_rectangulo <- function(lado1, lado2) 
+{
+  area <- lado1 * lado2
+  print(paste("el área es ", area))
+}
+area_rectangulo(lado1 = 2, lado2 = 3)
+"el área es  6"
+```

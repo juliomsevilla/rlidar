@@ -1,0 +1,162 @@
+# Gráficos {#graphics}
+
+Si por algo destaca R es por su capacidad gráfica y por la flexibilidad en la creación de los mismos ofreciendo una increíble variedad de gráficos (Para tener una idea, escribe
+`demo(graphics)`).
+
+De antemano se debe tener claro una cuestión para el aspecto gráfico en R: el resultado de una función gráfica no puede ser asignado a un objeto (recordemos que el resultado de una operación de análisis estadístico se podia asignar a un objeto) si no que se muestra en el motor gráfico y nada mas.
+
+Existen dos tipos fundamentales de funciones gráficas: las funciones gráficas de alto nivel que crean una nueva gráfica y las funciones gráficas de bajo nivel que agregan elementos a una gráfica ya existente.
+
+## Los gráficos en R
+La instalación base de R trae una serie de gráficos que a buen seguro son lo suficientemente versátiles para cumplir con todas nuestras expectativas. Pero si con ellos no fuera suficiente, existen paquetes adaptados a esta función que amplían la riqueza gráfica del sistema R.
+
+La función usual de R para producir un gráfico es el comando `plot`:
+```{r, fig.width=4, fig.heigth=4}
+datos<-matrix(c(2,5,1,5,8,2,1,9,5,1,5,9), ncol=2) 
+colnames(datos)<-c("Peso", "Estatura")
+datos
+plot(datos)
+```
+
+Si quisiéramos añadir una descripción a nuestro gráfico, podríamos usar el comando `main` que pondrá un título al mismo. Además, podemos detallar un poco más las descripciones de los ejes con `xlab` e `ylab`. Obviamente, también podremos cambiar el color y el tipo de "punto" usando `col` y `type`. Para finalizar, podríamos añadir una rejilla en las marcas principales con `grid` y añadir un texto descriptivo con `text` en una determinada coordenada. Veámoslos todos juntos:
+
+```{r, fig.width=3}
+plot(datos, main="Mi primer gráfico en R", xlab="Peso (kg)", ylab="Estatura (m)", col="red")
+grid()
+text(7, 8, "texto explicativo")
+```
+
+Seguimos ampliando las opiones de nuestro gráfico. En ocasiones podremos desear añadir una determinada línea al mismo. para ello, nos podemos servir de la función `abline`:
+```{r, ffig.width=4, fig.heigth=4}
+plot(datos, main="Mi primer gráfico en R", xlab="Peso (kg)", ylab="Estatura (m)", col="red", type="p")
+ 
+abline(h=4, col="green") # Añade línea horizontal 
+abline(v=6, col= "blue") # Análogo para línea vertical
+abline(1,4, col="grey", lty=2) # Añade una línea de pendiente 1 y que corta al origen en 3 con trazo discontinuo
+```
+
+
+El sistema tradicional de gráficos ofrece una variedad de tipos de gráficos
+básicos: 
+
+* la función `plot()` produce gráficos de dispersión, 
+* la función `barplot()` produce gráficos de barra, 
+* la función `hist()` produce histogramas, 
+* la función `boxplot()` produce gráficos de caja, 
+* y la función `pie()` produce gráficos de tarta.
+
+Hemos de tener presente que R no distingue más tipos de gráficos siendo otros tipos de gráficos variaciones de estos principales. Por ello, un gráfico de dispersión con sus puntos interconectados por una línea, es una nueva orden en el comando `plot()`, denominada `type`:
+
+```{r, fig.width=4, fig.heigth=4}
+plot(datos, main="Mi primer gráfico en R", xlab="Peso (kg)", ylab="Estatura (m)", col="red", type="p")
+plot(datos, main="Mi primer gráfico en R", xlab="Peso (kg)", ylab="Estatura (m)", col="red", type="l")
+plot(datos, main="Mi primer gráfico en R", xlab="Peso (kg)", ylab="Estatura (m)", col="red", type="b")
+plot(datos, main="Mi primer gráfico en R", xlab="Peso (kg)", ylab="Estatura (m)", col="red", type="h")
+```
+
+O, repeticiones más o menos complejas del gráfico principal como el socorrido `pairs()` para ver correlaciones:
+```{r}
+data(iris)
+names (iris)
+pairs(iris[1:3], pch = 21)
+```
+
+Llegados a este punto, llega el momento de explicar un recurso del motor gráfico de R: la organización de los gráficos en la ventana. Para ello se utiliza la función `par()` que controla parámetros gráficos adicionales. veamos como funciona:
+
+```{r}
+par(mfrow=c(2,1))      # Dibuja una matriz de gráficos 2x1: un gráfico debajo de otro
+par(mfrow=c(2,3))      # Matriz de gráficos 2 x 3 : dos filas por tres columnas
+par(mfrow=c(1,1))      # un solo gráfico por ventana: la opción por defecto
+```
+
+Un detalle más. Ciertos elementos tienen gráficos predefinidos, ya que se sobreentiende que son de obligado diseño. Caso de esto pueden ser los gráficos descriptivos de un modelo lineal, por ejemplo (olvidémonos de la primera sintaxis, que se verá en capítulos más adelante):
+
+```{r message=F, warning=F}
+library(RCurl)
+datos_online <- read.csv(
+  text=getURL("https://gitlab.com/juliomsevilla/Rintro/raw/master/data/parc.csv"), 
+  header=TRUE)
+
+datos.df<-data.frame(datos_online)
+model<-lm(VSC~HD, datos.df)
+par(mfrow=c(2,2)) # De esta forma creamos una estructura gráfica de 2x2
+plot(model)
+par(mfrow=c(1,1)) # Y ahora volvemos a poner el sistema gráfico en su posición original
+```
+
+Una última cuestión. Hasta ahora hemos estado trabajando con un conjunto de datos sencillo, compuesto por dos variables. En el caso de disponer de más y querer representarlas, deberemos modificar nuestra sentencia para indicar este hecho:
+
+```{r, fig.width=4, fig.heigth=4}
+plot(datos.df$VSC~datos.df$HD, main="Mi primer gráfico en R", xlab="Volumen (m3)", ylab="Altura (m)", col="red", type="p")
+```
+Como vemos las posibilidades gráficas de R son muy grandes y son objeto de monografías exclusivas sobre sus capacidades.
+
+## ggplot2
+La librería ggplot2 [@R-ggplot2] es un paquete que se ha convertido en un imprescindible dentro del sistema R por sus capacidades gráficas. Si bien cambia un poco la concepción que hasta ahora tenemos de los gráficos, los beneficios que nos reporta suplen con creces su aparente complejidad.
+
+Este paquete se basa en elaborar un gráfico a partir de un proceso de acumulación de capas o layers siendo su esquema constante según la siguiente expresión: 
+
+> ggplot(data.frame, aes(x = variable)) + geom_forma() + stat_valor 
+
+donde:
+- `data.frame` es nuestro objeto de datos (en formato `data.frame`), 
+- `aes()` controla la estética del gráfico, es decir los elementos representables gráficamente (la posición x e y, el color,las columnas de la tabla de datos...)
+- `geom_` lo define con puntos, rectas, histogramas, densidades, etc. (además es capaz de superponer distintas geometrías),
+- y `stat_()`, que es un resumen estdístico de los datos asociado al tipo de geometría con que trabajamos. 
+
+Veamos un ejemplo:
+```{r message=F, warning=F}
+arbol <- read.table(
+  text=getURL("https://gitlab.com/juliomsevilla/Rintro/raw/master/data/Pesadas.txt"), 
+  header=TRUE)
+arbol.df<-data.frame(arbol)
+names(arbol.df)
+library(ggplot2)
+ggplot(arbol.df, aes(x =CLM)) + geom_bar()
+```
+
+Como vemos, le hemos indicado que utilice el conjunto de datos `arbol.df`, que use en el eje horizontal los valores de `CLM` (al no incluir datos en la vertical, realizará un conteo) y que el tipo de gráfico sea de barras. En este punto, ggplot2 es muy versatil definiendo el tipo de goemetría (o "gráfico") aceptando multitud de variaciones: `geom_bar`, `geom_point`,`geom_boxplot`, `geom_violin`, `geom_line`,...
+
+Una de las ventajas del uso de ggplot2 es que podemos guardar el gráfico en un objeto y añadir más capas. Por ejemplo, añadamos las etiquetas de los ejes y el título:
+```{r, fig.width=3}
+grafico<-ggplot(arbol.df, aes(x = CLM)) + geom_bar()
+grafico+xlab("Monte") + ylab ("Número de individuos")+ggtitle("Gráfico de individuos")
+
+```
+
+Ahora vamos a controlar la estética del gráfico, haciendo que las barras sean más pequeñas y cambien de color:
+```{r}
+grafico<-ggplot(arbol.df, aes(x = CLM)) + geom_bar(width=0.5, colour="black", fill="red")
+grafico+xlab("Monte") + ylab ("Número de individuos")+ggtitle("Gráfico de individuos")
+
+```
+
+Los temas (theme) son un conjunto de opciones predefinidas sobre la apariencia de los objetos en ggplot. El tema por defecto del ggplot dibuja el gráfico sobre un fondo gris. Podemos cambiarlo a otro tema  añadiendo el comando especifico. En este caso usamos el `theme_bw()` (es interesante el paquete `ggthemes` que incorpora una gran variedad de ellos):
+```{r}
+grafico+theme_bw()
+```
+
+Ahora vamos a ir un paso más allá. Vamos a crear un grafico de dispersión, comparando dos variables y usaremos el comando `facet` que permite reproducir el mismo gráfico en diferentes niveles de un factor:
+```{r}
+#Version nº1
+grafico<-ggplot(arbol.df, aes(x = Ht, y= Dn)) + geom_point(width=0.5, colour="black", fill="red")
+grafico+xlab("Altura") + ylab ("Diametro")+ggtitle("Gráfico de individuos")+ facet_grid(CLM ~.)
+#Version nº2
+grafico<-ggplot(arbol.df, aes(x = Ht, y= Dn)) + geom_point(width=0.5, colour="black", fill="red")
+grafico+xlab("Altura") + ylab ("Diametro")+ggtitle("Gráfico de individuos")+ facet_grid(.~ CLM)
+```
+
+¿Y si quisiéramos rotar los ejes para observar mejor nuestros datos? Para ello podemos usar `coord_flip()`.
+
+```{r}
+grafico+xlab("log de la altura") + ylab ("Número de individuos")+ggtitle("Gráfico de individuos")+ facet_grid(.~ CLM)+coord_flip()
+```
+
+Para finalizar, veamos la opción ´stat´ que como dijimos es un resumen estadístico de los datos asociado al tipo de geometría con que trabajamos:
+
+```{r}
+grafico+xlab("Altura") + ylab ("Diametro")+ggtitle("Gráfico de individuos")+ stat_smooth()
+grafico+xlab("Altura") + ylab ("Diametro")+ggtitle("Gráfico de individuos")+ stat_smooth(method=lm)
+```
+
+En definitiva, las posibilidades son casi infinitas y evidentemente escapa a los propósitos de este manual. Si se desea saber más sobre este paquete, podemos consultar su manual oficial: [ggplot2: Elegant Graphics for Data Analysis](http://ggplot2.org/book/).

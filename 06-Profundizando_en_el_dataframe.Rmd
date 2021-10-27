@@ -1,0 +1,111 @@
+# Profundizando en el `data.frame` {#dataframe}
+
+## Introducción
+Las más de las veces nuestras estructuras de datos se enmarcarán dentro de "tablas" clásicas y son necesiarias para la amplia mayoría de análisis estadísticos.Estas tablas, en R, se denominan `data.frame` y, lo más común es que partamos de una tabla con datos y con ella y sobre ella ejecutemos nuestros análisis. 
+
+R, como tal, no dispone de un sistema visual para gestionar las tablas por lo que deberemos conocer los rudimentos para procesarlas y adaptarlas a nuestros requerimientos una vez las tengamos en la memoria despues de haberlas cargado tal y como se explicó en el capítulo \@ref(data).
+
+
+
+## Visualizar tablas
+Generalmente comenzaremos visualizando nuestra tabla. Para ello, R dispone, entre otros de los sigueintes comandos (comenzaremos cargando el fichero `iris`):
+
+```{r eval=FALSE}
+iris
+plot(iris) # hace una representación gráfica
+summary(iris) #calcula los estadísticos descriptivos
+head(iris) #extrae los 6 primeros registros
+tail (iris) #extrae los 6 últimos registros
+names(iris) # muestra las cabeceras de las columnas
+dim(iris) # visualiza las dimensiones de filas y columnas de la tabla
+
+```
+
+## Extracción de datos en nuevos `data.frame`
+
+Un recurso muy interesante de R es como extrae los datos del `data.frame`. Veamos algunos ejemplos:
+
+```{r  eval = FALSE}
+iris[1:10,] #extrae las 10 primeras filas
+iris[,1:3] #extrae las 3 primeras columnas
+iris[1:10,1:3] #extrae las 10 primeras filas y de las 3 primeras columnas
+iris[c(2,5,8),] #extrae las filas 2, 5, y 8
+iris[, c(1,3)] #extrae las columnas 1 y 3
+```
+ 
+Por otro lado, si no conocemos el número de columna del campo que deseamos, siempre podremos, evidentemente, extraerlo con su nombre:
+```{r eval=FALSE}
+iris[, "Sepal.Width"]
+
+```
+
+Finalmente, si deseamos extraer determinados elementos con expresiones lógicas, podremos hacerlo con un simple comando:
+```{r eval=FALSE}
+iris[iris$Species == "setosa",]
+```
+
+## Gestionar los `data.frame`
+Si antes nos referiamos a la visualización y extracción de los elementos, veamos ahora como se gestionan los `data.frame`en su conjunto.
+
+Para añadir una columna, lo haremos añadiendo una variable dentro de ella:
+```{r}
+datos<-iris
+datos$Petal.Area <- datos$Petal.Length * datos$Petal.Width
+head (datos)
+```
+Y para eliminarlas, lo podremos hacer *anulando* la columna deseada:
+```{r}
+datos$Petal.Area <- NULL
+head (datos)
+```
+
+Por otro lado, podremos desear ordenar los datos de una determinada manera.Para ello, haremos uso de `order`:
+```{r}
+datos2 <- iris[order(iris$Sepal.Width),]
+```
+
+## La libreria `dplyr`
+
+En este punto, si bien como se ha descrito en los puntos anteriors R, en su versión `base` es bastante potente en la gestión de los `data.frame`, es adecuado destacar el paquete `dplyr` [@R-dplyr]que entre otras cosas, hace más natural la gramática de trabajo con las tablas.
+
+La sintaxis grámatica de esta libreria facilita la gestión de los elementos ya que las peticiones y comandos se hacen con las palabras habituales en otros softwares, lo que nos descarga en gran medida de memorizar comandos recurrentes. Veamos algunos ejemplos:
+
+```{r message=F, warning=F}
+library (dplyr)
+datos<-iris
+subset <- select(datos, Sepal.Width:Species) #extrae las columnas que van de Sepal.Width:Species
+Petal.Length.5<- filter(datos, Petal.Length > 5) #extrae aquellas filas donde Petal.Length es mayor de cinco
+Petal.Length.order <- arrange(datos, desc(Petal.Length)) #Extrae un nuevo data.frame ordenado por Petal.Length de forma descendente
+Petal.Length.rename<-rename(iris, Long.Petalos=Petal.Length, Ancho.Petalos=Petal.Width) #Renombra determinadas columnas
+iris.Petal.Area <- mutate(iris, Petal.Area = Petal.Width*Petal.Length) #Añade una nueva variable al data.frame
+iris.aleat<-sample_n(iris, 4) #Extrae aleatoriamente cuatro registros
+iris.aleat.025<- sample_frac(iris, 0.25, rep=TRUE) #Extrae un 25% de obs con reemplazamiento
+```
+
+Mención aparte requiere el operador `%>%`. Este permite concatenar varias secuencias de comandos aliviando drásticamente nuestro código:
+```{r}
+iris.2<- select(iris, contains('Petal'))
+iris.3<- filter(iris.2, Petal.Length > 4)
+iris.4<- arrange(iris.3, Petal.Length)
+head(iris.4)
+
+
+iris.5<-iris %>%
+  select(contains('Petal'))  %>%
+  filter(Petal.Length > 4)   %>%
+  arrange(Petal.Length)
+head(iris.5)
+
+```
+
+Para finalizar, queda mencionar que la concatenación de los comandos de `dplyr` con el operador `%>%`permite crear estructuras no definidas en el paquete, pero que son de uso recurrente. Veamos como calculamos unos subtotales de nuestra tabla `iris`por especie:
+```{r}
+iris.summarize<-iris %>%
+  group_by(Species) %>%
+  summarise(mean(Petal.Length))%>%
+  rename(Especies=Species, Long.Petalos.media=`mean(Petal.Length)`) #Notese las comillas en el campo mean(Petal.Length) que no está en el campo Species
+```
+
+
+
+
