@@ -13,15 +13,15 @@ Entendemos por teledetección a toda aquella técnica que permite obtener inform
 
 Se necesita una fuente de energía, un objeto y un sensor teledetector. El primero "ilumina" el objetivo emitiendo una onda electromagnética (flujo de fotones) y el último mide la energía solar (es decir la radiación electromagnética) reflejada por el objetivo. Cuando la fuente de energía es el Sol, y el captador solo mide la radiación reflejada, se conoce como teledetección pasiva.
 
-    ![]([https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/pasiva.png)
+![](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/pasiva.png){width="294"}
 
 -   Teledetección activa: emiten energía que les permite "escanear" objetos y áreas. El sistema mide la radiación reflejada del objetivo.
 
-    ![](%5B%5Bhttps://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/activa.png)
+    -   Radar. Teledetector activo que mide el tiempo que tarda una emisión en ir y volver de un punto, estableciendo así la localización, altura, velocidad y dirección de un objeto determinado.
 
--   Radar. Teledetector activo que mide el tiempo que tarda una emisión en ir y volver de un punto, estableciendo así la localización, altura, velocidad y dirección de un objeto determinado.
+    -   LiDAR (Light Detection and Ranging o Laser Imaging Detection and Ranging). Dispositivo que permite determinar la distancia desde un emisor láser a un objeto o superficie utilizando un haz láser pulsado.
 
--   LiDAR (Light Detection and Ranging o Laser Imaging Detection and Ranging). Dispositivo que permite determinar la distancia desde un emisor láser a un objeto o superficie utilizando un haz láser pulsado.
+![](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/activa.png){width="294"}
 
 ## Preparación del entorno de trabajo
 
@@ -105,7 +105,7 @@ La clasificación de los puntos terrestres es un paso importante en el procesami
 
 Los datos del ejemplo ya vienen clasificados, pero los volveremos a clasificar para demostrar como lo efectúa la librería `lidR`. En concreto, esta librería usa dos formas de clasificación: `pmf()` [@R-Zhang2003] y `csf()` [@R-Zhang2016], cada uno con parámetros característicos que podremos modificar y es uno de los pasos más críticos y complejos del proceso.
 
-Una vez que los puntos son clasificados, se asigna el valor de 2 al campo de clasificación del retorno, siguiendo las prescripciones que estandariza la Sociedad Americana de Fotogrametría y Teledetección ([ASPRS](<https://www.asprs.org/>)) para los formatos LAS 1.1, 1.2, 1.3 y 1.4.[^lidar-1]
+Una vez que los puntos son clasificados, se asigna el valor de 2 al campo de clasificación del retorno, siguiendo las prescripciones que estandariza la Sociedad Americana de Fotogrametría y Teledetección ([ASPRS](https://www.asprs.org/)) para los formatos LAS 1.1, 1.2, 1.3 y 1.4.[^lidar-1]
 
 [^lidar-1]: El comando `classify_ground` no se limita solo a estos dos algoritmos, si no que la librería `lidR` permite añadir todo aquel algoritmo del que dispongamos fácilmente.
 
