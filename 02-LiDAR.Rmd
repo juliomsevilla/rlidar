@@ -2,7 +2,7 @@
 
 ```{r, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_knit$set(root.dir = 'c:/curso_lidar/')
+##knitr::opts_knit$set(root.dir = 'c:/curso_lidar/')
 ```
 
 ## La teledetección y la tecnología LiDAR
@@ -13,11 +13,11 @@ Entendemos por teledetección a toda aquella técnica que permite obtener inform
 
 Se necesita una fuente de energía, un objeto y un sensor teledetector. El primero "ilumina" el objetivo emitiendo una onda electromagnética (flujo de fotones) y el último mide la energía solar (es decir la radiación electromagnética) reflejada por el objetivo. Cuando la fuente de energía es el Sol, y el captador solo mide la radiación reflejada, se conoce como teledetección pasiva.
 
-    ![]([https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/pasiva.png)](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/markdown.png))
+    ![]([https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/pasiva.png)
 
 -   Teledetección activa: emiten energía que les permite "escanear" objetos y áreas. El sistema mide la radiación reflejada del objetivo.
 
-    ![](%5B%5Bhttps://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/activa.png)](<https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/pasiva.png>))](<https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/markdown.png>))
+    ![](%5B%5Bhttps://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/activa.png)
 
 -   Radar. Teledetector activo que mide el tiempo que tarda una emisión en ir y volver de un punto, estableciendo así la localización, altura, velocidad y dirección de un objeto determinado.
 
@@ -42,7 +42,7 @@ invisible(lapply(packages, library, character.only = TRUE))
 
 ```
 
-A continuación crearemos uan estructura de carpetas, predefinida, de forma que el trabajo sea lo más sitemático posible. Con ellas creadas, fijamos el directorio de trabajo y procedemos a descargar y descomprimir los datos LiDAR, vectoriales, raster y tabulares de los que disponemos del trabajo de campo y del vuelo LiDAR:
+A continuación crearemos una estructura de carpetas, predefinida, de forma que el trabajo sea lo más sistemático posible. Con ellas creadas, fijamos el directorio de trabajo y procedemos a descargar y descomprimir los datos LiDAR, vectoriales, raster y tabulares de los que disponemos del trabajo de campo y del vuelo LiDAR:
 
 ```{r directorios, eval = FALSE}
 dir.create("c:/curso_lidar/", showWarnings = FALSE)

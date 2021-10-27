@@ -35,4 +35,5 @@ El presente documento es un manual básico sobre el lenguaje de programación R,
 Es importante recalcar lo básico del documento y que este no pretende ser una obra de referencia en el género: son unas notas, simples, accesibles y sin mayor aspiración de que sirvan para para que un neofito se introduzca en el tema y se despierte en él las ganas de aprender este lenguaje y sobre LiDAR forestal. Por ello, si deseas un conocimiento más profundo, te recomendamos que adquieras la bibliografía que se citará a lo largo de estas notas.
 
 La versión en línea de este libro está autorizada bajo la licencia [the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/)
+
 ![](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/by-nc-sa.png)
