@@ -1,0 +1,221 @@
+# R y la información LiDAR forestal
+
+## Preparación del entorno de trabajo
+
+Cargamos las librerias
+
+```{r libraries}
+
+packages <- c("lidR", "sf", "rgdal", "dplyr", "skimr", "lmtest")
+
+# Instalamos los paquetes que no estén instalados
+installed_packages <- packages %in% rownames(installed.packages())
+if (any(installed_packages == FALSE)) {
+  install.packages(packages[!installed_packages])
+}
+
+# Cargamos los paquetes
+invisible(lapply(packages, library, character.only = TRUE))
+
+```
+
+Fijamos el directorio de trabajo y creamos una carpeta para crear todos los elementos "basura"
+
+```{r directorios, eval = FALSE}
+dir.create("c:/curso_lidar/", showWarnings = FALSE)
+
+
+dir<-"c:/curso_lidar/"
+setwd(dir)
+
+dir.create("./temp/", showWarnings = FALSE)
+dir.create("./data/", showWarnings = FALSE)
+
+setwd("./data/")
+download.file("https://raw.githubusercontent.com/juliomsevilla/rlidar/main/data/lidar_data.zip",
+              destfile = paste(getwd()), 
+              method = "curl", overwrite=TRUE)
+
+unzip(lidar_data.zip)
+
+```
+
+## Preparación de los datos
+
+Los tiles no vienen proyectados, por lo que procederemos a ello
+
+```{r proyeccion, eval = FALSE}
+tiles <- list.files(paste(dir, "data/tiles/", sep=""), full.names=TRUE)
+setwd("./temp/")
+getwd()
+
+
+for (file in tiles) {
+  
+  las<-readLAS(file)
+  epsg(las) <- 25830
+  writeLAS(las, basename(file))
+  rm(las)
+}
+
+setwd(dir)
+```
+
+## Análisis de los datos
+
+Creamos el catálogo y le añadimos las teselas
+
+```{r catalogo, eval = FALSE}
+ctg <- readLAScatalog("./temp/")
+ctg
+plot(ctg)
+
+las_check(ctg)
+
+opt_filter(ctg) <- "-drop-scan-angle '>=91'"
+
+```
+
+Aunque los datos ya vienen clasificados, los volvemos a clasificar
+
+```{r clasificacion,  eval = FALSE}
+opt_output_files(ctg) <- paste0(dir,"/temp/", "{*}_classified")
+classified_ctg <- classify_ground(ctg, csf())
+```
+
+```{r clasificacion_previa,  eval = FALSE, echo=FALSE}
+classified_ctg <- ctg
+```
+
+## Modelo digital del terreno
+
+Calculamos el modelo digital del terreno. Usamos Kriging (lidR usa la librería `gstat`) porque los otros métodos no se pueden usar debido a los pocos puntos de suelo que tenemos (da un error de convexhull si por ejemplo hacemos `algorithm = tin()`)
+
+```{r mdt, eval = FALSE}
+opt_output_files(classified_ctg) <- paste0(dir,"/temp/", "{*}_dtm")
+
+dtm <- grid_terrain(classified_ctg, 1,  algorithm = kriging(k = 40), overwrite=TRUE)
+dtm
+plot(dtm)
+
+```
+
+## Modelo digital de las elevaciones
+
+```{r mde, eval = FALSE}
+# Normalizamos los datos y creamos el modelo digital de elevaciones normalizado
+opt_output_files(classified_ctg) <- paste0(dir,"/temp/", "{*}_norm")
+ctg_norm <- normalize_height(classified_ctg, dtm)
+ctg_norm
+las_check(ctg_norm)
+
+
+opt_filter(ctg_norm) <- "-drop_z_below 0" # Ignoramos los puntos con cota por debajo de cero
+opt_output_files(ctg_norm) <- paste0(dir,"/temp/", "{*}_mds")
+mdv <- grid_canopy(ctg_norm, 1, pitfree(c(0,2,5,10,15), c(0,1), subcircle = 0.2))
+plot(mdv)
+
+```
+
+## Métodos de masa
+
+Intersectamos las parcelas con un buffer circular de 9 metros
+
+```{r clipdata, eval = FALSE}
+opt_filter(ctg_norm) <- "-drop_z_below 0"
+
+plots <- st_read("./data/parc.shp")
+plots
+plot(plots, add = TRUE, col="red")
+
+
+tiles_norm <- list.files(paste(dir, "temp/", sep=""), full.names = TRUE, pattern = "(.*)norm.las$")
+ctg_norm <- readLAScatalog(tiles_norm)
+stats <- plot_metrics(ctg_norm, .stdmetrics_z, plots, radius = 9)
+```
+
+Cargamos los datos medidos en las parcelas y se lo añadimos a los datos lidar
+
+```{r correlaciones, eval = FALSE}
+vcc <- readxl::read_excel("data/muestreo.xlsx")
+head(vcc)
+
+vcc <- left_join(vcc, stats, by = c("parc" = "id"))
+
+df <- vcc %>% 
+      select(-c(geometry, parc, X, Y))%>%
+      cor()%>%
+      data.frame()%>%
+      add_rownames(var = "lidar_stat")%>%
+      filter(lidar_stat!='vcc')%>%
+      arrange(desc(vcc))
+
+
+head(df, 3)
+tail(df, 3)
+```
+
+Analizamos la variable dependiente
+
+```{r normalidad, eval = FALSE}
+skim(vcc$vcc)
+shapiro.test(vcc$vcc)
+
+plotn <- function(x,main="Histograma de frecuencias \ny distribución normal",
+                  xlab="X",ylab="Densidad") {
+  min <- min(x)
+  max <- max(x)
+  media <- mean(x)
+  dt <- sd(x)
+  hist(x,freq=F,main=main,xlab=xlab,ylab=ylab)
+  curve(dnorm(x,media,dt), min, max,add = T,col="blue")
+}
+
+plotn(sqrt(vcc$vcc))
+```
+
+Construimos el modelo
+
+```{r linear_model, eval = FALSE}
+lm<-lm(vcc~zq90, data=vcc)
+summary(lm)
+
+plot(vcc$vcc, predict(lm))
+abline(0,1)
+
+par(mfrow=c(2,2)) 
+plot(lm)
+par(mfrow=c(1,1))
+
+shapiro.test(residuals(lm))
+bptest(lm)
+```
+
+Calculamos los estadísticos de los recintos. El radio de nuestras parcelas es de 9 metros, por lo que la superficie es de 254.469004941 m2 y esto implica una resolución de 15.95208
+
+```{r gridmetrics, eval = FALSE}
+pixel <- sqrt(pi*9^2)
+
+metrics <- grid_metrics(ctg_norm, .stdmetrics_z, res = pixel)
+
+plot(metrics$zq90)
+vcc_pred <- -899.025+73.630*metrics$zq90
+plot(vcc_pred)
+
+writeRaster(vcc_pred, paste(dir, "/temp/", "vcc_pred.tif", sep=""), datatype='FLT4S',overwrite = TRUE, bylayer = FALSE)
+```
+
+## Segmentación de árboles
+
+```{r segmentation, eval = FALSE}
+opt_output_files(ctg_norm) <- ""
+ttops <- find_trees(ctg_norm, lmf(4), uniqueness = "bitmerge")
+
+opt_output_files(ctg_norm) <- paste0(dir,"/temp/", "{*}_segmented")
+segm <- dalponte2016(mdv, ttops)
+ctg_segmented <- segment_trees(ctg_norm, segm)
+
+opt_output_files(ctg_segmented) <- ""
+lasplot <- clip_circle(ctg_segmented, 599358.8984,4734939.2286,  50)
+#plot(lasplot, color = "treeID", bg = "white", size = 4)
+```

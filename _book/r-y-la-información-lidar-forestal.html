@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 R y la información LiDAR forestal | Tratamiento de datos LiDAR forestales mediante R</title>
+  <meta name="description" content="En este libro haremos una introducción al tratamiento de datos LiDAR forestales mediante R" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 R y la información LiDAR forestal | Tratamiento de datos LiDAR forestales mediante R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="En este libro haremos una introducción al tratamiento de datos LiDAR forestales mediante R" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 R y la información LiDAR forestal | Tratamiento de datos LiDAR forestales mediante R" />
+  
+  <meta name="twitter:description" content="En este libro haremos una introducción al tratamiento de datos LiDAR forestales mediante R" />
+  
+
+<meta name="author" content="Julio M. Sevilla" />
+
+
+<meta name="date" content="2021-10-27" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<link rel="prev" href="introducción-al-lenguaje-r.html"/>
+<link rel="next" href="references.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introducción</a></li>
+<li class="chapter" data-level="1" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html"><i class="fa fa-check"></i><b>1</b> Introducción al lenguaje R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#introducción-al-lenguaje-r-1"><i class="fa fa-check"></i><b>1.1</b> Introducción al lenguaje R</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#que-es-r"><i class="fa fa-check"></i><b>1.1.1</b> ¿Que es R?</a></li>
+<li class="chapter" data-level="1.1.2" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#por-qué-usar-r"><i class="fa fa-check"></i><b>1.1.2</b> ¿Por qué usar R?</a></li>
+<li class="chapter" data-level="1.1.3" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#recursos-sobre-r"><i class="fa fa-check"></i><b>1.1.3</b> Recursos sobre R</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#instalación-de-r-rstudio-y-librerias"><i class="fa fa-check"></i><b>1.2</b> Instalación de R, RStudio y librerias</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#instalación-de-r"><i class="fa fa-check"></i><b>1.2.1</b> Instalación de R</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#actualización-de-r"><i class="fa fa-check"></i><b>1.3</b> Actualización de R</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#el-sistema-r"><i class="fa fa-check"></i><b>1.3.1</b> El Sistema R</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#gestión-de-directorios-archivos-y-versiones"><i class="fa fa-check"></i><b>1.4</b> Gestión de directorios, archivos y versiones</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#gestión-de-directorios"><i class="fa fa-check"></i><b>1.4.1</b> Gestión de directorios</a></li>
+<li class="chapter" data-level="1.4.2" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#manejo-de-archivos"><i class="fa fa-check"></i><b>1.4.2</b> Manejo de archivos</a></li>
+<li class="chapter" data-level="1.4.3" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#carga-de-datos-usando-el-buscador"><i class="fa fa-check"></i><b>1.4.3</b> Carga de datos usando el buscador</a></li>
+<li class="chapter" data-level="1.4.4" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#limpieza-de-la-memoria-en-r"><i class="fa fa-check"></i><b>1.4.4</b> Limpieza de la memoria en <code>R</code></a></li>
+<li class="chapter" data-level="1.4.5" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#control-de-versiones"><i class="fa fa-check"></i><b>1.4.5</b> Control de versiones</a></li>
+<li class="chapter" data-level="1.4.6" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#buenas-prácticas-en-la-gestión-de-un-proyecto"><i class="fa fa-check"></i><b>1.4.6</b> Buenas prácticas en la gestión de un proyecto</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#manejo-de-objetos-en-r"><i class="fa fa-check"></i><b>1.5</b> Manejo de objetos en R</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#r-como-calculadora"><i class="fa fa-check"></i><b>1.5.1</b> R como calculadora</a></li>
+<li class="chapter" data-level="1.5.2" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#manejo-de-variables"><i class="fa fa-check"></i><b>1.5.2</b> Manejo de variables</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#manejo-de-datos-en-r"><i class="fa fa-check"></i><b>1.6</b> Manejo de datos en R</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#tipos-de-datos"><i class="fa fa-check"></i><b>1.6.1</b> Tipos de datos</a></li>
+<li class="chapter" data-level="1.6.2" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#valores-perdidos-y-nulos"><i class="fa fa-check"></i><b>1.6.2</b> Valores perdidos y nulos</a></li>
+<li class="chapter" data-level="1.6.3" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#registros-duplicados"><i class="fa fa-check"></i><b>1.6.3</b> Registros duplicados</a></li>
+<li class="chapter" data-level="1.6.4" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#reescalado"><i class="fa fa-check"></i><b>1.6.4</b> Reescalado</a></li>
+<li class="chapter" data-level="1.6.5" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#normalizado-y-estandarizado"><i class="fa fa-check"></i><b>1.6.5</b> Normalizado y estandarizado</a></li>
+<li class="chapter" data-level="1.6.6" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#categorizar-los-datos"><i class="fa fa-check"></i><b>1.6.6</b> Categorizar los datos</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#profundizando-en-el-data.frame"><i class="fa fa-check"></i><b>1.7</b> Profundizando en el <code>data.frame</code></a>
+<ul>
+<li class="chapter" data-level="1.7.1" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#introducción-1"><i class="fa fa-check"></i><b>1.7.1</b> Introducción</a></li>
+<li class="chapter" data-level="1.7.2" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#visualizar-tablas"><i class="fa fa-check"></i><b>1.7.2</b> Visualizar tablas</a></li>
+<li class="chapter" data-level="1.7.3" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#extracción-de-datos-en-nuevos-data.frame"><i class="fa fa-check"></i><b>1.7.3</b> Extracción de datos en nuevos <code>data.frame</code></a></li>
+<li class="chapter" data-level="1.7.4" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#gestionar-los-data.frame"><i class="fa fa-check"></i><b>1.7.4</b> Gestionar los <code>data.frame</code></a></li>
+<li class="chapter" data-level="1.7.5" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#la-libreria-dplyr"><i class="fa fa-check"></i><b>1.7.5</b> La libreria <code>dplyr</code></a></li>
+</ul></li>
+<li class="chapter" data-level="1.8" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#estructuras-de-control"><i class="fa fa-check"></i><b>1.8</b> Estructuras de control</a>
+<ul>
+<li class="chapter" data-level="1.8.1" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#introducción-2"><i class="fa fa-check"></i><b>1.8.1</b> Introducción</a></li>
+<li class="chapter" data-level="1.8.2" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#while"><i class="fa fa-check"></i><b>1.8.2</b> <code>while</code></a></li>
+<li class="chapter" data-level="1.8.3" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#for"><i class="fa fa-check"></i><b>1.8.3</b> <code>for</code></a></li>
+</ul></li>
+<li class="chapter" data-level="1.9" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#los-gráficos-en-r"><i class="fa fa-check"></i><b>1.9</b> Los gráficos en R</a>
+<ul>
+<li class="chapter" data-level="1.9.1" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#ggplot2"><i class="fa fa-check"></i><b>1.9.1</b> ggplot2</a></li>
+</ul></li>
+<li class="chapter" data-level="1.10" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#las-funciones-en-r"><i class="fa fa-check"></i><b>1.10</b> Las funciones en R</a>
+<ul>
+<li class="chapter" data-level="1.10.1" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#estructura-de-una-función"><i class="fa fa-check"></i><b>1.10.1</b> Estructura de una función</a></li>
+</ul></li>
+<li class="chapter" data-level="1.11" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#publicación-de-resultados"><i class="fa fa-check"></i><b>1.11</b> Publicación de resultados</a>
+<ul>
+<li class="chapter" data-level="1.11.1" data-path="introducción-al-lenguaje-r.html"><a href="introducción-al-lenguaje-r.html#la-escritura-con-markdown"><i class="fa fa-check"></i><b>1.11.1</b> La escritura con Markdown</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="r-y-la-información-lidar-forestal.html"><a href="r-y-la-información-lidar-forestal.html"><i class="fa fa-check"></i><b>2</b> R y la información LiDAR forestal</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="r-y-la-información-lidar-forestal.html"><a href="r-y-la-información-lidar-forestal.html#preparación-del-entorno-de-trabajo"><i class="fa fa-check"></i><b>2.1</b> Preparación del entorno de trabajo</a></li>
+<li class="chapter" data-level="2.2" data-path="r-y-la-información-lidar-forestal.html"><a href="r-y-la-información-lidar-forestal.html#preparación-de-los-datos"><i class="fa fa-check"></i><b>2.2</b> Preparación de los datos</a></li>
+<li class="chapter" data-level="2.3" data-path="r-y-la-información-lidar-forestal.html"><a href="r-y-la-información-lidar-forestal.html#análisis-de-los-datos"><i class="fa fa-check"></i><b>2.3</b> Análisis de los datos</a></li>
+<li class="chapter" data-level="2.4" data-path="r-y-la-información-lidar-forestal.html"><a href="r-y-la-información-lidar-forestal.html#modelo-digital-del-terreno"><i class="fa fa-check"></i><b>2.4</b> Modelo digital del terreno</a></li>
+<li class="chapter" data-level="2.5" data-path="r-y-la-información-lidar-forestal.html"><a href="r-y-la-información-lidar-forestal.html#modelo-digital-de-las-elevaciones"><i class="fa fa-check"></i><b>2.5</b> Modelo digital de las elevaciones</a></li>
+<li class="chapter" data-level="2.6" data-path="r-y-la-información-lidar-forestal.html"><a href="r-y-la-información-lidar-forestal.html#métodos-de-masa"><i class="fa fa-check"></i><b>2.6</b> Métodos de masa</a></li>
+<li class="chapter" data-level="2.7" data-path="r-y-la-información-lidar-forestal.html"><a href="r-y-la-información-lidar-forestal.html#segmentación-de-árboles"><i class="fa fa-check"></i><b>2.7</b> Segmentación de árboles</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>3</b> Referencias</a></li>
+<li class="divider"></li>
+Ir a <a href="http://www.jsevilla.es/">JSEVILLA</a>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Tratamiento de datos LiDAR forestales mediante R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="r-y-la-información-lidar-forestal" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> R y la información LiDAR forestal</h1>
+<div id="preparación-del-entorno-de-trabajo" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Preparación del entorno de trabajo</h2>
+<p>Cargamos las librerias</p>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="r-y-la-información-lidar-forestal.html#cb167-1" aria-hidden="true" tabindex="-1"></a>packages <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lidR&quot;</span>, <span class="st">&quot;sf&quot;</span>, <span class="st">&quot;rgdal&quot;</span>, <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;skimr&quot;</span>, <span class="st">&quot;lmtest&quot;</span>)</span>
+<span id="cb167-2"><a href="r-y-la-información-lidar-forestal.html#cb167-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb167-3"><a href="r-y-la-información-lidar-forestal.html#cb167-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalamos los paquetes que no estén instalados</span></span>
+<span id="cb167-4"><a href="r-y-la-información-lidar-forestal.html#cb167-4" aria-hidden="true" tabindex="-1"></a>installed_packages <span class="ot">&lt;-</span> packages <span class="sc">%in%</span> <span class="fu">rownames</span>(<span class="fu">installed.packages</span>())</span>
+<span id="cb167-5"><a href="r-y-la-información-lidar-forestal.html#cb167-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">any</span>(installed_packages <span class="sc">==</span> <span class="cn">FALSE</span>)) {</span>
+<span id="cb167-6"><a href="r-y-la-información-lidar-forestal.html#cb167-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(packages[<span class="sc">!</span>installed_packages])</span>
+<span id="cb167-7"><a href="r-y-la-información-lidar-forestal.html#cb167-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb167-8"><a href="r-y-la-información-lidar-forestal.html#cb167-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb167-9"><a href="r-y-la-información-lidar-forestal.html#cb167-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargamos los paquetes</span></span>
+<span id="cb167-10"><a href="r-y-la-información-lidar-forestal.html#cb167-10" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">lapply</span>(packages, library, <span class="at">character.only =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
+<pre><code>## Warning: package &#39;lidR&#39; was built under R version 4.0.5</code></pre>
+<pre><code>## Loading required package: raster</code></pre>
+<pre><code>## Warning: package &#39;raster&#39; was built under R version 4.0.5</code></pre>
+<pre><code>## Loading required package: sp</code></pre>
+<pre><code>## Warning: package &#39;sp&#39; was built under R version 4.0.5</code></pre>
+<pre><code>## 
+## Attaching package: &#39;raster&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     select</code></pre>
+<pre><code>## Warning: package &#39;sf&#39; was built under R version 4.0.5</code></pre>
+<pre><code>## Linking to GEOS 3.9.1, GDAL 3.2.1, PROJ 7.2.1</code></pre>
+<pre><code>## Warning: package &#39;rgdal&#39; was built under R version 4.0.5</code></pre>
+<pre><code>## Please note that rgdal will be retired by the end of 2023,
+## plan transition to sf/stars/terra functions using GDAL and PROJ
+## at your earliest convenience.
+## 
+## rgdal: version: 1.5-27, (SVN revision 1148)
+## Geospatial Data Abstraction Library extensions to R successfully loaded
+## Loaded GDAL runtime: GDAL 3.2.1, released 2020/12/29
+## Path to GDAL shared files: C:/Users/jsevilla/Documents/R/R-4.0.2/library/rgdal/gdal
+## GDAL binary built with GEOS: TRUE 
+## Loaded PROJ runtime: Rel. 7.2.1, January 1st, 2021, [PJ_VERSION: 721]
+## Path to PROJ shared files: C:/Users/jsevilla/Documents/R/R-4.0.2/library/rgdal/proj
+## PROJ CDN enabled: FALSE
+## Linking to sp version:1.4-5
+## To mute warnings of possible GDAL/OSR exportToProj4() degradation,
+## use options(&quot;rgdal_show_exportToProj4_warnings&quot;=&quot;none&quot;) before loading sp or rgdal.
+## Overwritten PROJ_LIB was C:/Users/jsevilla/Documents/R/R-4.0.2/library/rgdal/proj</code></pre>
+<pre><code>## Warning: package &#39;skimr&#39; was built under R version 4.0.5</code></pre>
+<pre><code>## 
+## Attaching package: &#39;skimr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:raster&#39;:
+## 
+##     bind</code></pre>
+<pre><code>## Warning: package &#39;lmtest&#39; was built under R version 4.0.5</code></pre>
+<pre><code>## Loading required package: zoo</code></pre>
+<pre><code>## Warning: package &#39;zoo&#39; was built under R version 4.0.5</code></pre>
+<pre><code>## 
+## Attaching package: &#39;zoo&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:lidR&#39;:
+## 
+##     index, index&lt;-</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     as.Date, as.Date.numeric</code></pre>
+<p>Fijamos el directorio de trabajo y creamos una carpeta para crear todos los elementos “basura”</p>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="r-y-la-información-lidar-forestal.html#cb188-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;c:/curso_lidar/&quot;</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb188-2"><a href="r-y-la-información-lidar-forestal.html#cb188-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb188-3"><a href="r-y-la-información-lidar-forestal.html#cb188-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb188-4"><a href="r-y-la-información-lidar-forestal.html#cb188-4" aria-hidden="true" tabindex="-1"></a>dir<span class="ot">&lt;-</span><span class="st">&quot;c:/curso_lidar/&quot;</span></span>
+<span id="cb188-5"><a href="r-y-la-información-lidar-forestal.html#cb188-5" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(dir)</span>
+<span id="cb188-6"><a href="r-y-la-información-lidar-forestal.html#cb188-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb188-7"><a href="r-y-la-información-lidar-forestal.html#cb188-7" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;./temp/&quot;</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb188-8"><a href="r-y-la-información-lidar-forestal.html#cb188-8" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;./data/&quot;</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb188-9"><a href="r-y-la-información-lidar-forestal.html#cb188-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb188-10"><a href="r-y-la-información-lidar-forestal.html#cb188-10" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">&quot;./data/&quot;</span>)</span>
+<span id="cb188-11"><a href="r-y-la-información-lidar-forestal.html#cb188-11" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">&quot;https://raw.githubusercontent.com/juliomsevilla/rlidar/main/data/lidar_data.zip&quot;</span>,</span>
+<span id="cb188-12"><a href="r-y-la-información-lidar-forestal.html#cb188-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">destfile =</span> <span class="fu">paste</span>(<span class="fu">getwd</span>()), </span>
+<span id="cb188-13"><a href="r-y-la-información-lidar-forestal.html#cb188-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">&quot;curl&quot;</span>, <span class="at">overwrite=</span><span class="cn">TRUE</span>)</span>
+<span id="cb188-14"><a href="r-y-la-información-lidar-forestal.html#cb188-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb188-15"><a href="r-y-la-información-lidar-forestal.html#cb188-15" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span>(lidar_data.zip)</span></code></pre></div>
+</div>
+<div id="preparación-de-los-datos" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Preparación de los datos</h2>
+<p>Los tiles no vienen proyectados, por lo que procederemos a ello</p>
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="r-y-la-información-lidar-forestal.html#cb189-1" aria-hidden="true" tabindex="-1"></a>tiles <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="fu">paste</span>(dir, <span class="st">&quot;data/tiles/&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>), <span class="at">full.names=</span><span class="cn">TRUE</span>)</span>
+<span id="cb189-2"><a href="r-y-la-información-lidar-forestal.html#cb189-2" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">&quot;./temp/&quot;</span>)</span>
+<span id="cb189-3"><a href="r-y-la-información-lidar-forestal.html#cb189-3" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span>
+<span id="cb189-4"><a href="r-y-la-información-lidar-forestal.html#cb189-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb189-5"><a href="r-y-la-información-lidar-forestal.html#cb189-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb189-6"><a href="r-y-la-información-lidar-forestal.html#cb189-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (file <span class="cf">in</span> tiles) {</span>
+<span id="cb189-7"><a href="r-y-la-información-lidar-forestal.html#cb189-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb189-8"><a href="r-y-la-información-lidar-forestal.html#cb189-8" aria-hidden="true" tabindex="-1"></a>  las<span class="ot">&lt;-</span><span class="fu">readLAS</span>(file)</span>
+<span id="cb189-9"><a href="r-y-la-información-lidar-forestal.html#cb189-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">epsg</span>(las) <span class="ot">&lt;-</span> <span class="dv">25830</span></span>
+<span id="cb189-10"><a href="r-y-la-información-lidar-forestal.html#cb189-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">writeLAS</span>(las, <span class="fu">basename</span>(file))</span>
+<span id="cb189-11"><a href="r-y-la-información-lidar-forestal.html#cb189-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rm</span>(las)</span>
+<span id="cb189-12"><a href="r-y-la-información-lidar-forestal.html#cb189-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb189-13"><a href="r-y-la-información-lidar-forestal.html#cb189-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb189-14"><a href="r-y-la-información-lidar-forestal.html#cb189-14" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(dir)</span></code></pre></div>
+</div>
+<div id="análisis-de-los-datos" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Análisis de los datos</h2>
+<p>Creamos el catálogo y le añadimos las teselas</p>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="r-y-la-información-lidar-forestal.html#cb190-1" aria-hidden="true" tabindex="-1"></a>ctg <span class="ot">&lt;-</span> <span class="fu">readLAScatalog</span>(<span class="st">&quot;./temp/&quot;</span>)</span>
+<span id="cb190-2"><a href="r-y-la-información-lidar-forestal.html#cb190-2" aria-hidden="true" tabindex="-1"></a>ctg</span>
+<span id="cb190-3"><a href="r-y-la-información-lidar-forestal.html#cb190-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ctg)</span>
+<span id="cb190-4"><a href="r-y-la-información-lidar-forestal.html#cb190-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb190-5"><a href="r-y-la-información-lidar-forestal.html#cb190-5" aria-hidden="true" tabindex="-1"></a><span class="fu">las_check</span>(ctg)</span>
+<span id="cb190-6"><a href="r-y-la-información-lidar-forestal.html#cb190-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb190-7"><a href="r-y-la-información-lidar-forestal.html#cb190-7" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_filter</span>(ctg) <span class="ot">&lt;-</span> <span class="st">&quot;-drop-scan-angle &#39;&gt;=91&#39;&quot;</span></span></code></pre></div>
+<p>Aunque los datos ya vienen clasificados, los volvemos a clasificar</p>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="r-y-la-información-lidar-forestal.html#cb191-1" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(ctg) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(dir,<span class="st">&quot;/temp/&quot;</span>, <span class="st">&quot;{*}_classified&quot;</span>)</span>
+<span id="cb191-2"><a href="r-y-la-información-lidar-forestal.html#cb191-2" aria-hidden="true" tabindex="-1"></a>classified_ctg <span class="ot">&lt;-</span> <span class="fu">classify_ground</span>(ctg, <span class="fu">csf</span>())</span></code></pre></div>
+</div>
+<div id="modelo-digital-del-terreno" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Modelo digital del terreno</h2>
+<p>Calculamos el modelo digital del terreno. Usamos Kriging (lidR usa la librería <code>gstat</code>) porque los otros métodos no se pueden usar debido a los pocos puntos de suelo que tenemos (da un error de convexhull si por ejemplo hacemos <code>algorithm = tin()</code>)</p>
+<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="r-y-la-información-lidar-forestal.html#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(classified_ctg) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(dir,<span class="st">&quot;/temp/&quot;</span>, <span class="st">&quot;{*}_dtm&quot;</span>)</span>
+<span id="cb192-2"><a href="r-y-la-información-lidar-forestal.html#cb192-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb192-3"><a href="r-y-la-información-lidar-forestal.html#cb192-3" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> <span class="fu">grid_terrain</span>(classified_ctg, <span class="dv">1</span>,  <span class="at">algorithm =</span> <span class="fu">kriging</span>(<span class="at">k =</span> <span class="dv">40</span>), <span class="at">overwrite=</span><span class="cn">TRUE</span>)</span>
+<span id="cb192-4"><a href="r-y-la-información-lidar-forestal.html#cb192-4" aria-hidden="true" tabindex="-1"></a>dtm</span>
+<span id="cb192-5"><a href="r-y-la-información-lidar-forestal.html#cb192-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dtm)</span></code></pre></div>
+</div>
+<div id="modelo-digital-de-las-elevaciones" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Modelo digital de las elevaciones</h2>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="r-y-la-información-lidar-forestal.html#cb193-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Normalizamos los datos y creamos el modelo digital de elevaciones normalizado</span></span>
+<span id="cb193-2"><a href="r-y-la-información-lidar-forestal.html#cb193-2" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(classified_ctg) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(dir,<span class="st">&quot;/temp/&quot;</span>, <span class="st">&quot;{*}_norm&quot;</span>)</span>
+<span id="cb193-3"><a href="r-y-la-información-lidar-forestal.html#cb193-3" aria-hidden="true" tabindex="-1"></a>ctg_norm <span class="ot">&lt;-</span> <span class="fu">normalize_height</span>(classified_ctg, dtm)</span>
+<span id="cb193-4"><a href="r-y-la-información-lidar-forestal.html#cb193-4" aria-hidden="true" tabindex="-1"></a>ctg_norm</span>
+<span id="cb193-5"><a href="r-y-la-información-lidar-forestal.html#cb193-5" aria-hidden="true" tabindex="-1"></a><span class="fu">las_check</span>(ctg_norm)</span>
+<span id="cb193-6"><a href="r-y-la-información-lidar-forestal.html#cb193-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb193-7"><a href="r-y-la-información-lidar-forestal.html#cb193-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb193-8"><a href="r-y-la-información-lidar-forestal.html#cb193-8" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_filter</span>(ctg_norm) <span class="ot">&lt;-</span> <span class="st">&quot;-drop_z_below 0&quot;</span> <span class="co"># Ignoramos los puntos con cota por debajo de cero</span></span>
+<span id="cb193-9"><a href="r-y-la-información-lidar-forestal.html#cb193-9" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(ctg_norm) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(dir,<span class="st">&quot;/temp/&quot;</span>, <span class="st">&quot;{*}_mds&quot;</span>)</span>
+<span id="cb193-10"><a href="r-y-la-información-lidar-forestal.html#cb193-10" aria-hidden="true" tabindex="-1"></a>mdv <span class="ot">&lt;-</span> <span class="fu">grid_canopy</span>(ctg_norm, <span class="dv">1</span>, <span class="fu">pitfree</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">15</span>), <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">subcircle =</span> <span class="fl">0.2</span>))</span>
+<span id="cb193-11"><a href="r-y-la-información-lidar-forestal.html#cb193-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mdv)</span></code></pre></div>
+</div>
+<div id="métodos-de-masa" class="section level2" number="2.6">
+<h2><span class="header-section-number">2.6</span> Métodos de masa</h2>
+<p>Intersectamos las parcelas con un buffer circular de 9 metros</p>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="r-y-la-información-lidar-forestal.html#cb194-1" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_filter</span>(ctg_norm) <span class="ot">&lt;-</span> <span class="st">&quot;-drop_z_below 0&quot;</span></span>
+<span id="cb194-2"><a href="r-y-la-información-lidar-forestal.html#cb194-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb194-3"><a href="r-y-la-información-lidar-forestal.html#cb194-3" aria-hidden="true" tabindex="-1"></a>plots <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;./data/parc.shp&quot;</span>)</span>
+<span id="cb194-4"><a href="r-y-la-información-lidar-forestal.html#cb194-4" aria-hidden="true" tabindex="-1"></a>plots</span>
+<span id="cb194-5"><a href="r-y-la-información-lidar-forestal.html#cb194-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(plots, <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span>
+<span id="cb194-6"><a href="r-y-la-información-lidar-forestal.html#cb194-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb194-7"><a href="r-y-la-información-lidar-forestal.html#cb194-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb194-8"><a href="r-y-la-información-lidar-forestal.html#cb194-8" aria-hidden="true" tabindex="-1"></a>tiles_norm <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="fu">paste</span>(dir, <span class="st">&quot;temp/&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>), <span class="at">full.names =</span> <span class="cn">TRUE</span>, <span class="at">pattern =</span> <span class="st">&quot;(.*)norm.las$&quot;</span>)</span>
+<span id="cb194-9"><a href="r-y-la-información-lidar-forestal.html#cb194-9" aria-hidden="true" tabindex="-1"></a>ctg_norm <span class="ot">&lt;-</span> <span class="fu">readLAScatalog</span>(tiles_norm)</span>
+<span id="cb194-10"><a href="r-y-la-información-lidar-forestal.html#cb194-10" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="fu">plot_metrics</span>(ctg_norm, .stdmetrics_z, plots, <span class="at">radius =</span> <span class="dv">9</span>)</span></code></pre></div>
+<p>Cargamos los datos medidos en las parcelas y se lo añadimos a los datos lidar</p>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="r-y-la-información-lidar-forestal.html#cb195-1" aria-hidden="true" tabindex="-1"></a>vcc <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">&quot;data/muestreo.xlsx&quot;</span>)</span>
+<span id="cb195-2"><a href="r-y-la-información-lidar-forestal.html#cb195-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(vcc)</span>
+<span id="cb195-3"><a href="r-y-la-información-lidar-forestal.html#cb195-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb195-4"><a href="r-y-la-información-lidar-forestal.html#cb195-4" aria-hidden="true" tabindex="-1"></a>vcc <span class="ot">&lt;-</span> <span class="fu">left_join</span>(vcc, stats, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;parc&quot;</span> <span class="ot">=</span> <span class="st">&quot;id&quot;</span>))</span>
+<span id="cb195-5"><a href="r-y-la-información-lidar-forestal.html#cb195-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb195-6"><a href="r-y-la-información-lidar-forestal.html#cb195-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> vcc <span class="sc">%&gt;%</span> </span>
+<span id="cb195-7"><a href="r-y-la-información-lidar-forestal.html#cb195-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(geometry, parc, X, Y))<span class="sc">%&gt;%</span></span>
+<span id="cb195-8"><a href="r-y-la-información-lidar-forestal.html#cb195-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cor</span>()<span class="sc">%&gt;%</span></span>
+<span id="cb195-9"><a href="r-y-la-información-lidar-forestal.html#cb195-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">data.frame</span>()<span class="sc">%&gt;%</span></span>
+<span id="cb195-10"><a href="r-y-la-información-lidar-forestal.html#cb195-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_rownames</span>(<span class="at">var =</span> <span class="st">&quot;lidar_stat&quot;</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb195-11"><a href="r-y-la-información-lidar-forestal.html#cb195-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(lidar_stat<span class="sc">!=</span><span class="st">&#39;vcc&#39;</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb195-12"><a href="r-y-la-información-lidar-forestal.html#cb195-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">arrange</span>(<span class="fu">desc</span>(vcc))</span>
+<span id="cb195-13"><a href="r-y-la-información-lidar-forestal.html#cb195-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb195-14"><a href="r-y-la-información-lidar-forestal.html#cb195-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb195-15"><a href="r-y-la-información-lidar-forestal.html#cb195-15" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df, <span class="dv">3</span>)</span>
+<span id="cb195-16"><a href="r-y-la-información-lidar-forestal.html#cb195-16" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(df, <span class="dv">3</span>)</span></code></pre></div>
+<p>Analizamos la variable dependiente</p>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="r-y-la-información-lidar-forestal.html#cb196-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(vcc<span class="sc">$</span>vcc)</span>
+<span id="cb196-2"><a href="r-y-la-información-lidar-forestal.html#cb196-2" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(vcc<span class="sc">$</span>vcc)</span>
+<span id="cb196-3"><a href="r-y-la-información-lidar-forestal.html#cb196-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb196-4"><a href="r-y-la-información-lidar-forestal.html#cb196-4" aria-hidden="true" tabindex="-1"></a>plotn <span class="ot">&lt;-</span> <span class="cf">function</span>(x,<span class="at">main=</span><span class="st">&quot;Histograma de frecuencias </span><span class="sc">\n</span><span class="st">y distribución normal&quot;</span>,</span>
+<span id="cb196-5"><a href="r-y-la-información-lidar-forestal.html#cb196-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">xlab=</span><span class="st">&quot;X&quot;</span>,<span class="at">ylab=</span><span class="st">&quot;Densidad&quot;</span>) {</span>
+<span id="cb196-6"><a href="r-y-la-información-lidar-forestal.html#cb196-6" aria-hidden="true" tabindex="-1"></a>  min <span class="ot">&lt;-</span> <span class="fu">min</span>(x)</span>
+<span id="cb196-7"><a href="r-y-la-información-lidar-forestal.html#cb196-7" aria-hidden="true" tabindex="-1"></a>  max <span class="ot">&lt;-</span> <span class="fu">max</span>(x)</span>
+<span id="cb196-8"><a href="r-y-la-información-lidar-forestal.html#cb196-8" aria-hidden="true" tabindex="-1"></a>  media <span class="ot">&lt;-</span> <span class="fu">mean</span>(x)</span>
+<span id="cb196-9"><a href="r-y-la-información-lidar-forestal.html#cb196-9" aria-hidden="true" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> <span class="fu">sd</span>(x)</span>
+<span id="cb196-10"><a href="r-y-la-información-lidar-forestal.html#cb196-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hist</span>(x,<span class="at">freq=</span>F,<span class="at">main=</span>main,<span class="at">xlab=</span>xlab,<span class="at">ylab=</span>ylab)</span>
+<span id="cb196-11"><a href="r-y-la-información-lidar-forestal.html#cb196-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">curve</span>(<span class="fu">dnorm</span>(x,media,dt), min, max,<span class="at">add =</span> T,<span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb196-12"><a href="r-y-la-información-lidar-forestal.html#cb196-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb196-13"><a href="r-y-la-información-lidar-forestal.html#cb196-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb196-14"><a href="r-y-la-información-lidar-forestal.html#cb196-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plotn</span>(<span class="fu">sqrt</span>(vcc<span class="sc">$</span>vcc))</span></code></pre></div>
+<p>Construimos el modelo</p>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="r-y-la-información-lidar-forestal.html#cb197-1" aria-hidden="true" tabindex="-1"></a>lm<span class="ot">&lt;-</span><span class="fu">lm</span>(vcc<span class="sc">~</span>zq90, <span class="at">data=</span>vcc)</span>
+<span id="cb197-2"><a href="r-y-la-información-lidar-forestal.html#cb197-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm)</span>
+<span id="cb197-3"><a href="r-y-la-información-lidar-forestal.html#cb197-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb197-4"><a href="r-y-la-información-lidar-forestal.html#cb197-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(vcc<span class="sc">$</span>vcc, <span class="fu">predict</span>(lm))</span>
+<span id="cb197-5"><a href="r-y-la-información-lidar-forestal.html#cb197-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="dv">0</span>,<span class="dv">1</span>)</span>
+<span id="cb197-6"><a href="r-y-la-información-lidar-forestal.html#cb197-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb197-7"><a href="r-y-la-información-lidar-forestal.html#cb197-7" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>)) </span>
+<span id="cb197-8"><a href="r-y-la-información-lidar-forestal.html#cb197-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lm)</span>
+<span id="cb197-9"><a href="r-y-la-información-lidar-forestal.html#cb197-9" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb197-10"><a href="r-y-la-información-lidar-forestal.html#cb197-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb197-11"><a href="r-y-la-información-lidar-forestal.html#cb197-11" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(<span class="fu">residuals</span>(lm))</span>
+<span id="cb197-12"><a href="r-y-la-información-lidar-forestal.html#cb197-12" aria-hidden="true" tabindex="-1"></a><span class="fu">bptest</span>(lm)</span></code></pre></div>
+<p>Calculamos los estadísticos de los recintos. El radio de nuestras parcelas es de 9 metros, por lo que la superficie es de 254.469004941 m2 y esto implica una resolución de 15.95208</p>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="r-y-la-información-lidar-forestal.html#cb198-1" aria-hidden="true" tabindex="-1"></a>pixel <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(pi<span class="sc">*</span><span class="dv">9</span><span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb198-2"><a href="r-y-la-información-lidar-forestal.html#cb198-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb198-3"><a href="r-y-la-información-lidar-forestal.html#cb198-3" aria-hidden="true" tabindex="-1"></a>metrics <span class="ot">&lt;-</span> <span class="fu">grid_metrics</span>(ctg_norm, .stdmetrics_z, <span class="at">res =</span> pixel)</span>
+<span id="cb198-4"><a href="r-y-la-información-lidar-forestal.html#cb198-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb198-5"><a href="r-y-la-información-lidar-forestal.html#cb198-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(metrics<span class="sc">$</span>zq90)</span>
+<span id="cb198-6"><a href="r-y-la-información-lidar-forestal.html#cb198-6" aria-hidden="true" tabindex="-1"></a>vcc_pred <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">899.025+73.630</span><span class="sc">*</span>metrics<span class="sc">$</span>zq90</span>
+<span id="cb198-7"><a href="r-y-la-información-lidar-forestal.html#cb198-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(vcc_pred)</span>
+<span id="cb198-8"><a href="r-y-la-información-lidar-forestal.html#cb198-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb198-9"><a href="r-y-la-información-lidar-forestal.html#cb198-9" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(vcc_pred, <span class="fu">paste</span>(dir, <span class="st">&quot;/temp/&quot;</span>, <span class="st">&quot;vcc_pred.tif&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>), <span class="at">datatype=</span><span class="st">&#39;FLT4S&#39;</span>,<span class="at">overwrite =</span> <span class="cn">TRUE</span>, <span class="at">bylayer =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+</div>
+<div id="segmentación-de-árboles" class="section level2" number="2.7">
+<h2><span class="header-section-number">2.7</span> Segmentación de árboles</h2>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="r-y-la-información-lidar-forestal.html#cb199-1" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(ctg_norm) <span class="ot">&lt;-</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb199-2"><a href="r-y-la-información-lidar-forestal.html#cb199-2" aria-hidden="true" tabindex="-1"></a>ttops <span class="ot">&lt;-</span> <span class="fu">find_trees</span>(ctg_norm, <span class="fu">lmf</span>(<span class="dv">4</span>), <span class="at">uniqueness =</span> <span class="st">&quot;bitmerge&quot;</span>)</span>
+<span id="cb199-3"><a href="r-y-la-información-lidar-forestal.html#cb199-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb199-4"><a href="r-y-la-información-lidar-forestal.html#cb199-4" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(ctg_norm) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(dir,<span class="st">&quot;/temp/&quot;</span>, <span class="st">&quot;{*}_segmented&quot;</span>)</span>
+<span id="cb199-5"><a href="r-y-la-información-lidar-forestal.html#cb199-5" aria-hidden="true" tabindex="-1"></a>segm <span class="ot">&lt;-</span> <span class="fu">dalponte2016</span>(mdv, ttops)</span>
+<span id="cb199-6"><a href="r-y-la-información-lidar-forestal.html#cb199-6" aria-hidden="true" tabindex="-1"></a>ctg_segmented <span class="ot">&lt;-</span> <span class="fu">segment_trees</span>(ctg_norm, segm)</span>
+<span id="cb199-7"><a href="r-y-la-información-lidar-forestal.html#cb199-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb199-8"><a href="r-y-la-información-lidar-forestal.html#cb199-8" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(ctg_segmented) <span class="ot">&lt;-</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb199-9"><a href="r-y-la-información-lidar-forestal.html#cb199-9" aria-hidden="true" tabindex="-1"></a>lasplot <span class="ot">&lt;-</span> <span class="fu">clip_circle</span>(ctg_segmented, <span class="fl">599358.8984</span>,<span class="fl">4734939.2286</span>,  <span class="dv">50</span>)</span>
+<span id="cb199-10"><a href="r-y-la-información-lidar-forestal.html#cb199-10" aria-hidden="true" tabindex="-1"></a><span class="co">#plot(lasplot, color = &quot;treeID&quot;, bg = &quot;white&quot;, size = 4)</span></span></code></pre></div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introducción-al-lenguaje-r.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

@@ -1,7 +1,7 @@
 ---
-title: "Introducción al lenguaje de programación R"
+title: "Tratamiento de datos LiDAR forestales mediante R"
 author: "Julio M. Sevilla"
-description: "En este libro haremos una introducción al lenguaje de programación R"
+description: "En este libro haremos una introducción al tratamiento de datos LiDAR forestales mediante R"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
@@ -11,30 +11,28 @@ link-citations: yes
 favicon: "favicon.ico"
 output:
   bookdown::gitbook:
-    
     config:
       toc:
         after: |
-          Ir a <a href="http://www.epidom.es/">EPIDOM</a>
-      edit: https://gitlab.com/juliomsevilla/Rintro/edit/master/%s
-
-
+          Ir a <a href="http://www.jsevilla.es/">JSEVILLA</a>
 ---
 
-# Introducción {-}
+# Introducción {.unnumbered}
+
 ```{r setup, include=FALSE}
 library(magrittr)
 library(knitr)
 ```
 
 ```{r write-bib, include=FALSE}
-knitr::write_bib(c(.packages(), 'bookdown', 'car', 'dplyr', 'dummies','flexdashboard', 'ggplot2', 'installr', 'jsonlite', 'knitr', 'nlme','Rcmdr', 'RCurl', 'rmarkdown', 'scales', 'shiny', 'XML'), 'packages.bib')
+knitr::write_bib(c(.packages(), 'bookdown', 'car', 'dplyr', 'dummies','flexdashboard', 'ggplot2', 'installr', 'jsonlite', 'knitr', 'nlme','Rcmdr', 'RCurl', 'rmarkdown', 'scales', 'shiny', 'XML', "lidR", "sf", "rgdal", "dplyr", "skimr", "lmtest"), 'packages.bib')
 ```
 
-R es un lenguaje que originalmente se pensó por y para estadísticos. Hoy, se ha convertido en uno de los cinco principales lenguajes de programación no siendo ninguno de estos cinco lenguajes puramente estadísticos, lo cual nos lleva a pensar que quizás ya no estemos ante lo que se pensó, y que ese "niño" ha crecido y se está haciendo "mayor."
+R es un lenguaje que originalmente se pensó por y para estadísticos. Hoy, se ha convertido en uno de los diez principales lenguajes de programación no siendo ninguno de estos cinco lenguajes puramente estadísticos, lo cual nos lleva a pensar que quizás ya no estemos ante lo que se pensó, y que ese "niño" ha crecido y se está haciendo "mayor."
 
-El presente documento es un manual básico sobre el lenguaje de programación R, su fundamento, utilidad y consejos prácticos para su uso. Es importante recalcar lo básico del mismo y que este no pretende ser una obra de referencia en el género: son unas notas, simples, accesibles y sin mayor aspiración de que sirvan para para que un neofito se introduzca en el tema y se despierte en él las ganas de aprender este lenguaje. Por ello, si deseas un conocimiento más profundo, te recomendamos que adquieras la bibliografía que se citará a lo largo de estas notas.
+El presente documento es un manual básico sobre el lenguaje de programación R, su fundamento, utilidad y consejos prácticos para su uso y su implementación para tratamiento de datos LiDAR forestales y la estimación de valores de la masa arbórea mediante métodos de masa y de árbol individual.
 
+Es importante recalcar lo básico del documento y que este no pretende ser una obra de referencia en el género: son unas notas, simples, accesibles y sin mayor aspiración de que sirvan para para que un neofito se introduzca en el tema y se despierte en él las ganas de aprender este lenguaje y sobre LiDAR forestal. Por ello, si deseas un conocimiento más profundo, te recomendamos que adquieras la bibliografía que se citará a lo largo de estas notas.
 
-
-
+La versión en línea de este libro está autorizada bajo la licencia [the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/)
+![](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/by-nc-sa.png)
