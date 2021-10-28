@@ -23,6 +23,75 @@ Se necesita una fuente de energía, un objeto y un sensor teledetector. El prime
 
 ![](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/activa.png){width="294"}
 
+## Tipos de LiDAR
+
+**LiDAR aerotransportado**
+
+En este caso, el sensor LiDAR va montado sobre un medio aéreo que puede ser desde tamaños de aviones comerciales a drones de reducido tamaño. Todos tienen en común que el sensor no está en el suelo terrestre y, las más de las veces, además, no es estático, si no que va recorriendo la superficie del objeto o terreno a escanear. De esta forma, la luz del láser se envía hacia el suelo y, cuando este toca un sólido es devuelto al medio aéreo que lo almacena, al menos, junto con las coordenadas geográficas del lugar (mediante tecnología GPS) y la posición del sensor de navegación inerte (INS)
+
+Este tipo de LiDAR es muy frecuente en evaluación de sistemas forestales, agricultura, medio ambiente así como para topografía y cálculos volumétricos. Muchas veces, el medio aéreo, además del sensor laser, monta cámaras hiperespectrales para observar elementos no accesibles dentro del espectro visible.
+
+A su vez, dentro del mundo de los LiDAR aerotransportados, distinguimos a su vez en dos grandes grupos:
+
+-   LiDAR batimétrico, que es capaz de evaluar la profundidad de una lámina de agua gracias a la disposición en el sensor de una haz de luz verde que es capaz de profundizar en el agua, mientras que el haz de luz infrarrojo rebotará en la zona superior de la misma.
+
+-   LiDAR topográfico, que a diferencia del anterior no posee ese haz verde y no puede profundizar en láminas de agua. De lejos, es el más usual.
+
+**LiDAR terrestre**
+
+Si el anterior se movía en un medio aéreo, en este caso el sensor se sitúa en la superficie terrestre y los rayos láser son distintos a los anteriores porque evidentemente, deben ser seguros para los ojos del operario que tenga cerca y de las personas que se sitúen alrededor.
+
+Este sistema es frecuentemente usado para la evaluación de infraestructuras terrestres, levantamientos topográficos de vías de comunicación, etc.
+
+Distinguimos, de nuevo dos tipos
+
+-   LiDAR movil. En este caso, el sensor va montado en un sistema móvil autónomo como puede ser un coche. Al igual que el sistema aéreo cuenta con sensores GPS e INS, para adquirir la posición exacta del punto. Este tipo de sensores, en la actualidad están siendo la revolución de la automoción, ya que gracias a ellos, en un futuro cercano podremos acceder de forma asequible a los [vehículos autónomos](https://www.motorpasion.com/tecnologia/que-es-un-lidar-y-como-funciona-el-sistema-de-medicion-y-deteccion-de-objetos-mediante-laser)
+
+```{=html}
+<!-- -->
+```
+-   LiDAR estático. También en la superficie terrestre, ahora el sensor está inmovil en un trípode. En el caso de tener que escaner un lugar de grandes dimensiones, este se va moviendo por el sitio y las nubes de puntos adquiridas en cada localización se van uniendo mediante dianas.
+
+## Componentes de un sistema LIDAR aerotransportado
+
+Un sistema LiDAR aerotransportado se compone, fundamentalmente de los siguientes elementos:
+
+-   Medio aéreo: puedes ser desde un drone a un avión comercial, todo depende de la superficie a escanear
+
+-   GPS diferencial: para corregir y ajustar la posición GPS tomada por el medio aéreo. Con el GPS obtendremos las coordenadas X e Y del punto
+
+-   INS o IMU: combinación de acelerómetros y giróscopos, mide e informa acerca de la velocidad, orientación y fuerzas gravitacionales de un aparato. Con el IMU obtendremos la posicioón X e Y del medio aereo
+
+-   Scanner Lidar: dispositivo que permite determinar la distancia desde un emisor láser a un objeto o superficie utilizando un haz láser pulsado. Con el sensor LiDAR obtendremos la altitud del objeto escaneado respecto al nivel del mar.
+
+-   En ocasiones, además, se añade al sistema un sensor óptico para capturar imágenes de alta resolución tanto en color natural como en otras partes del espectro luminico, de forma que contemos con ortofotos del momento en el que se escanea el terreno.
+
+[![Sistema LiDAR aerotransportado. Imagen: http://dielmo.com/](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/lidar-aerotransportado-01.jpg "Sistema LiDAR aerotransportado. Imagen: http://dielmo.com/")](http://dielmo.com/)
+
+## Estimación de las variables de la masa forestal
+
+El sensor LiDAR siempre nos dará la altitud de los puntos respecto al nivel del mar pero a nosotros, de cara a conocer las distintas variables dendrométricas de los árboles, nos interesan las alturas de los puntos respecto al suelo. Para ello, comenzaremos clasificando los retornos en puntos que pertenecen al suelo y puntos que no pertenecen al suelo (pueden ser edificios, árboles, líneas eléctricas,...).
+
+Una vez sabemos que retornos son de suelo y cuales no, con los primeros podremos interpolar un modelo digital del terreno, de forma que restamos los retornos que no son de suelo con este y el resultados será una nube de puntos con alturas en vez de altitudes (este proceso se denomina normalización)
+
+![](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/perfil_bruto_a_normalizado.png)
+
+La aplicación de la metodología de los métodos de masa consiste en relacionar unos lugares que conocemos a ciencia cierta, debido a que hemos procedido a medirlos in situ, con la nube de puntos en dichos lugares y, sí existe una determinada relación (lineal o no), extrapolarla al resto de la nube de puntos de forma que podamos predecir el comportamiento de la masa forestal sin haberla evaluado desde el suelo. Es decir, se trata de una evaluación supervisada.
+
+Supongamos que deseamos conocer el volumen de madera que tenemos en todo nuestro monte. A la vez que se realiza el vuelo, un equipo de personas mide los árboles de ciertas localizaciones de los montes. En estos árboles se mide al menos la altura de la última hoja verde y el diámetro a 1,30 m respecto al suelo. Estos dos valores se introducen en una ecuación (una variante de la ecuación que nos dice el volumen de un cono) y obtendremos el volumen del árbol. Esta ecuaciones se denominan en el argot forestal *modelos de cubicación*.
+
+Por comodidad y en adelante, estos lugares que vamos a recortar de la nube de puntos los denominaremos parcelas (de muestreo) y huelga hablar de la importancia de conocer con precisión y exactitud la ubicación de los mismos para que los puntos LiDAR que estudiemos sean los que exactamente han caído sobre los árboles medidos.
+
+![](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/recortes_parcelas.png)
+
+Una vez tenemos los volúmenes de los árboles, relacionamos estadísticamente estos volúmenes con los estadísticos descriptivos de la nube de puntos construyendo unas ecuaciones que se denominan *modelos de transición*. Evidentemente es crucial conocer previamente la masa forestal con la que trabajamos para discernir con cuantos estratos contaremos y, por tanto, tantas ecuaciones. En general, deberemos realizar estratos en nuestros montes si hay formaciones arbóreas que puedan hacer variar la forma de la nube de puntos: brinzales y chirpiales, clones y semillas, tipos de selvicultura como biomasa o madera,...
+
+![](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/bbdd.png)
+
+Finalmente, conocida la relación del volumen de los árboles con alguna o alguna característica de la nube de puntos no queda más que aplicarla en toda la extensión de la nube de puntos. Para ello, creamos una malla de recintos de igual superficie a la superficie de las parcelas de muestreo, extrayendo, en cada uno de estos recintos, las característica de la nube de puntos que mejor se relacionan con el volumen y aplicando el modelo estadístico que liga ambas variables.
+
+![](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/vcc_raster.png)
+
 ## Preparación del entorno de trabajo
 
 A lo largo de este manual haremos uso de varias librerías de `R` relativas al tratamiento de datos espacial, con especial atención a la librería `lidR` que sera la herramienta de cabecera. Dado que muchas puede ser que ya estén instaladas en tu computadora, usaremos un pequeño código que permite distinguir si ya lo está y si no es así, procede a instalarla de forma transparente para ti.
@@ -157,9 +226,7 @@ plot(mdv)
 
 ## Métodos de masa
 
-La aplicación de la metodología de los métodos de masa consiste en relacionar unos lugares que conocemos a ciencia cierta, debido a que hemos procedido a medirlos in situ, relacionarlos con la nube de puntos en esos lugares y, sí existe una determinada relación (lineal o no), extrapolarla al resto de la nube de puntos de forma que podamos predecir el comportamiento de la masa forestal sin haberla evaluado desde el suelo. Es decir, se trata de una evaluación supervisada.
-
-Por comodidad y en adelante, estos lugares que vamos a recortar de la nube de puntos los denominaremos parcelas (de muestreo) y huelga hablar de la importancia de conocer con precisión y exactitud la ubicación de los mismos para que los puntos LiDAR que estudiemos sean los que exactamente han caído sobre los árboles medidos.
+Para comenzar cargaremos los puntos de muestreo efectuados en campo:
 
 ```{r plots, eval = FALSE}
 opt_filter(ctg_norm) <- "-drop_z_below 0"
@@ -197,7 +264,7 @@ head(vcc)
 vcc <- left_join(vcc, stats, by = c("parc" = "id"))
 
 df <- vcc %>% 
-      select(-c(geometry, parc, X, Y))%>%
+      #select(-c(parc, X, Y))%>%
       cor()%>%
       data.frame()%>%
       add_rownames(var = "lidar_stat")%>%
