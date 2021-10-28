@@ -8,8 +8,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.align="center")
 
 Entendemos por teledetección a toda aquella técnica que permite obtener información a distancia de objetos sin que exista un contacto material (por ejemplo una fotografía). Generalmente se aplica a objetos situados sobre la superficie terrestre y coloquialmente es sinónimo de información a partir de imágenes de satélite
 
--   Teledetección pasiva: detectan radiación natural emitida o reflejada por el objeto o área circundante que está siendo observada. La luz solar reflejada es uno de los tipos de radiación más comunes medidos por esta clase de teledetección.
-Se necesita una fuente de energía, un objeto y un sensor teledetector. El primero "ilumina" el objetivo emitiendo una onda electromagnética (flujo de fotones) y el último mide la energía solar (es decir la radiación electromagnética) reflejada por el objetivo. Cuando la fuente de energía es el Sol, y el captador solo mide la radiación reflejada, se conoce como teledetección pasiva.
+-   Teledetección pasiva: detectan radiación natural emitida o reflejada por el objeto o área circundante que está siendo observada. La luz solar reflejada es uno de los tipos de radiación más comunes medidos por esta clase de teledetección. Se necesita una fuente de energía, un objeto y un sensor teledetector. El primero "ilumina" el objetivo emitiendo una onda electromagnética (flujo de fotones) y el último mide la energía solar (es decir la radiación electromagnética) reflejada por el objetivo. Cuando la fuente de energía es el Sol, y el captador solo mide la radiación reflejada, se conoce como teledetección pasiva.
 
 <center>
 
@@ -63,9 +62,11 @@ Un sistema LiDAR aerotransportado se compone, fundamentalmente de los siguientes
 
 -   GPS diferencial: para corregir y ajustar la posición GPS tomada por el medio aéreo. Con el GPS obtendremos las coordenadas X e Y del punto
 
--   INS o IMU: combinación de acelerómetros y giróscopos, mide e informa acerca de la velocidad, orientación y fuerzas gravitacionales de un aparato. Con el IMU obtendremos la posicioón X e Y del medio aereo
+-   INS o IMU: combinación de acelerómetros y giróscopos, mide e informa acerca de la velocidad, orientación y fuerzas gravitacionales de un aparato. Con el IMU obtendremos la posicioón X e Y del medio aéreo
 
--   Scanner Lidar: dispositivo que permite determinar la distancia desde un emisor láser a un objeto o superficie utilizando un haz láser pulsado. Con el sensor LiDAR obtendremos la altitud del objeto escaneado respecto al nivel del mar.
+-   Emisor Lidar y receptor electro-óptico: el emisor láser emite energía en una longitud de onda próxima al infrarrojo cercano (1064 nm) y es direccional (la energía se concentra en un punto). Por otro lado, el receptor capta la vuelta del láser. Con este sistema combinado, obtendremos la altitud del objeto escaneado respecto al nivel del mar.
+
+-   El sistema computacional para el procesado de la información
 
 -   En ocasiones, además, se añade al sistema un sensor óptico pasivo para capturar imágenes de alta resolución tanto en color natural como en otras partes del espectro luminico, de forma que contemos con ortofotos del momento en el que se escanea el terreno.
 
@@ -81,9 +82,13 @@ Como apuntamos anteriormente, LiDAR es un acrónimo de Light Detection and Rangi
 
 Muy sintéticamente, podemos conocer la altitud de los objetos gracias a que es un "haz de luz": multiplicando la velocidad a la que viaja (ya que la velocidad de la luz es constante) por el tiempo en que esa "luz" a tardado en retornar al emisor después de "golpear" en un objeto del suelo podremos inferir a la altitud que se sitúa el objeto. Y no solo eso, también sabremos la ubicación espacial de este objeto ya que conocemos la posición del emisor (obtenido a través del sistema GPS y el sistema IMU).
 
-El escaneo del terreno se puede realizar de muy diversas formas y generalmente se adapta a las características del mismo. Por otro lado, la cantidad de puntos que obtenemos del terreno, es relación directa de la velocidad de vuelo, altura de vuelo respecto al terreno y velocidad de emisión-recepción del escaner y se denomina densidad de escaneo, en términos de puntos/m^2^ del terreno.[^lidar-1]
+El escaneo del terreno se puede realizar de muy diversas formas y generalmente se adapta a las características del mismo. Por otro lado, la cantidad de puntos que obtenemos del terreno se denomina densidad de escaneo, en términos de puntos/m^2^ del terreno[^lidar-1] y es relación directa de:
 
 [^lidar-1]: 2 pts/m^2^ implica que en un 95% de las veces, si escogemos aleatoriamente un metro cuadrado del terreno, nos encontraremos al menos 2 retornos
+
+-   la velocidad de vuelo, altura de vuelo respecto al terreno,
+-   ángulo de escaneo o FOV (Field of View) y
+-   velocidad de emisión o frecuencia de pulsos (alrededor de 200.000 pulsos por segundo).
 
 <center>
 
@@ -103,7 +108,9 @@ En el caso del agua, puesto que el láser se encuentra generalmente en el infrar
 
 Al mismo tiempo el sensor registra las intensidades de la señal láser (dado que cada material refleja, "rebota", de manera distinta) con las que se pueden confeccionar imágenes de intensidades y tratarlas de forma similar a las imágenes capturadas con sensores pasivos.
 
-Con todo lo anterior, uan vez ejecutemos un escaneo LiDAR del terreno, en concreto con un medio aerotransportado, obtendremos, un fichero que generalmente es de extensión `*.las` o ya cada vez de forma más frecuente `*.laz` (a grandes rasgos: fichero original comprimido mediante el algoritmo `zip`) que contendrá al menos los siguientes datos por retorno:
+Con todo lo anterior, una vez ejecutemos un escaneo LiDAR del terreno, en concreto con un medio aerotransportado, obtendremos, un fichero binario que generalmente es de extensión `*.las`[^lidar-2] o ya cada vez de forma más frecuente `*.laz` (a grandes rasgos: fichero original comprimido mediante el algoritmo `zip`) que contendrá al menos los siguientes datos por retorno:
+
+[^lidar-2]: Desde su creación, existen diversos formatos de archivo `*.las`, siendo el más actual LAS 1.4 que fue aprobado en noviembre de 2011 por la ASPRS ([https://www.asprs.org/divisions-committees/lidar-division/laser-las-file-format-exchange-activities)](https://www.asprs.org/divisions-committees/lidar-division/laser-las-file-format-exchange-activities).)
 
 -   Coordenadas X e Y además de la altitud (Z) en el sistema de proyección que hayamos definido
 
@@ -117,12 +124,14 @@ Opcionalmente, también podremos contar con la siguiente información:
 
 -   Color capturado por el sensor pasivo si se ha decido montar en el mismo en el medio aéreo
 
-
 ## La clasificación de los retornos
 
-Mediante muy diversos algoritmos podremos "descubrir" sobre que tipo de objeto ha rebotado la señal. Hay que dejar claro que esta clasificación es en términos de probabilidad y que pueden existir errores. En general se utiliza la clasificación de la Sociedad Americana de Fotogrametría y Teledetección ([ASPRS](https://www.asprs.org/)) con la codificación siguiente:
+El filtrado y la clasificación de la nube de puntos LiDAR, son dos procesos que se incluyen dentro de la fase de edición que hay que realizar una vez ha sido realizada la captura de los datos. El primero consiste en "limpiar" de puntos erróneos el escaneo total y el segundo trata de categorizar los puntos en función de las características de los objetos sobre los que han rebotado (clasificarlos en puntos de suelo, vegetación, edificios, agua...).
+
+Mediante muy diversos algoritmos podremos "descubrir" sobre que tipo de objeto ha rebotado la señal. Hay que dejar claro que esta clasificación es en términos de probabilidad y que pueden existir errores. En general se utiliza la clasificación de la Sociedad Americana de Fotogrametría y Teledetección ([ASPRS](https://www.asprs.org/)), creador del fichero `*.las`, con la codificación siguiente:
 
 <center>
+
 +:----------------------:+------------------------------------------------+
 | Valor de clasificación | Significado                                    |
 +------------------------+------------------------------------------------+
@@ -168,6 +177,7 @@ Mediante muy diversos algoritmos podremos "descubrir" sobre que tipo de objeto h
 +------------------------+------------------------------------------------+
 | 64-255                 | Definido por el usuario                        |
 +------------------------+------------------------------------------------+
+
 </center>
 
 ## Estimación de las variables de la masa forestal
