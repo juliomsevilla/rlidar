@@ -24,7 +24,7 @@
 <meta name="author" content="Julio M. Sevilla" />
 
 
-<meta name="date" content="2021-10-28" />
+<meta name="date" content="2021-10-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -266,178 +266,178 @@ Ir a <a href="http://www.jsevilla.es/">JSEVILLA</a>
 <div id="preparación-del-entorno-de-trabajo" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Preparación del entorno de trabajo</h2>
 <p>A lo largo de este manual haremos uso de varias librerías de <code>R</code> relativas al tratamiento de datos espacial, con especial atención a la librería <code>lidR</code> que sera la herramienta de cabecera. Dado que muchas puede ser que ya estén instaladas en tu computadora, usaremos un pequeño código que permite distinguir si ya lo está y si no es así, procede a instalarla de forma transparente para ti.</p>
-<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="r-y-lidar.html#cb167-1" aria-hidden="true" tabindex="-1"></a>packages <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lidR&quot;</span>, <span class="st">&quot;sf&quot;</span>, <span class="st">&quot;rgdal&quot;</span>, <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;skimr&quot;</span>, <span class="st">&quot;lmtest&quot;</span>)</span>
-<span id="cb167-2"><a href="r-y-lidar.html#cb167-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb167-3"><a href="r-y-lidar.html#cb167-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalamos los paquetes que no estén instalados</span></span>
-<span id="cb167-4"><a href="r-y-lidar.html#cb167-4" aria-hidden="true" tabindex="-1"></a>installed_packages <span class="ot">&lt;-</span> packages <span class="sc">%in%</span> <span class="fu">rownames</span>(<span class="fu">installed.packages</span>())</span>
-<span id="cb167-5"><a href="r-y-lidar.html#cb167-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">any</span>(installed_packages <span class="sc">==</span> <span class="cn">FALSE</span>)) {</span>
-<span id="cb167-6"><a href="r-y-lidar.html#cb167-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(packages[<span class="sc">!</span>installed_packages])</span>
-<span id="cb167-7"><a href="r-y-lidar.html#cb167-7" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb167-8"><a href="r-y-lidar.html#cb167-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb167-9"><a href="r-y-lidar.html#cb167-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargamos los paquetes</span></span>
-<span id="cb167-10"><a href="r-y-lidar.html#cb167-10" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">lapply</span>(packages, library, <span class="at">character.only =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="r-y-lidar.html#cb1-1" aria-hidden="true" tabindex="-1"></a>packages <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lidR&quot;</span>, <span class="st">&quot;sf&quot;</span>, <span class="st">&quot;rgdal&quot;</span>, <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;skimr&quot;</span>, <span class="st">&quot;lmtest&quot;</span>)</span>
+<span id="cb1-2"><a href="r-y-lidar.html#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="r-y-lidar.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalamos los paquetes que no estén instalados</span></span>
+<span id="cb1-4"><a href="r-y-lidar.html#cb1-4" aria-hidden="true" tabindex="-1"></a>installed_packages <span class="ot">&lt;-</span> packages <span class="sc">%in%</span> <span class="fu">rownames</span>(<span class="fu">installed.packages</span>())</span>
+<span id="cb1-5"><a href="r-y-lidar.html#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">any</span>(installed_packages <span class="sc">==</span> <span class="cn">FALSE</span>)) {</span>
+<span id="cb1-6"><a href="r-y-lidar.html#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(packages[<span class="sc">!</span>installed_packages])</span>
+<span id="cb1-7"><a href="r-y-lidar.html#cb1-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-8"><a href="r-y-lidar.html#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="r-y-lidar.html#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargamos los paquetes</span></span>
+<span id="cb1-10"><a href="r-y-lidar.html#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">lapply</span>(packages, library, <span class="at">character.only =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
 <p>A continuación crearemos una estructura de carpetas, predefinida, de forma que el trabajo sea lo más sistemático posible. Con ellas creadas, fijamos el directorio de trabajo y procedemos a descargar y descomprimir los datos LiDAR, vectoriales, raster y tabulares de los que disponemos del trabajo de campo y del vuelo LiDAR:</p>
-<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="r-y-lidar.html#cb168-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;c:/curso_lidar/&quot;</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb168-2"><a href="r-y-lidar.html#cb168-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb168-3"><a href="r-y-lidar.html#cb168-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb168-4"><a href="r-y-lidar.html#cb168-4" aria-hidden="true" tabindex="-1"></a>dir<span class="ot">&lt;-</span><span class="st">&quot;c:/curso_lidar/&quot;</span></span>
-<span id="cb168-5"><a href="r-y-lidar.html#cb168-5" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(dir)</span>
-<span id="cb168-6"><a href="r-y-lidar.html#cb168-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb168-7"><a href="r-y-lidar.html#cb168-7" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;./temp/&quot;</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb168-8"><a href="r-y-lidar.html#cb168-8" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;./data/&quot;</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb168-9"><a href="r-y-lidar.html#cb168-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb168-10"><a href="r-y-lidar.html#cb168-10" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">&quot;./data/&quot;</span>)</span>
-<span id="cb168-11"><a href="r-y-lidar.html#cb168-11" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">&quot;https://raw.githubusercontent.com/juliomsevilla/rlidar/main/data/lidar_data.zip&quot;</span>,</span>
-<span id="cb168-12"><a href="r-y-lidar.html#cb168-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">destfile =</span> <span class="fu">paste</span>(<span class="fu">getwd</span>(), <span class="st">&quot;/lidar_data.zip&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>), </span>
-<span id="cb168-13"><a href="r-y-lidar.html#cb168-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">&quot;curl&quot;</span>, <span class="at">overwrite=</span><span class="cn">TRUE</span>)</span>
-<span id="cb168-14"><a href="r-y-lidar.html#cb168-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb168-15"><a href="r-y-lidar.html#cb168-15" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span>(<span class="fu">paste</span>(<span class="fu">getwd</span>(), <span class="st">&quot;/lidar_data.zip&quot;</span>,<span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
-<span id="cb168-16"><a href="r-y-lidar.html#cb168-16" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(dir)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="r-y-lidar.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;c:/curso_lidar/&quot;</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-2"><a href="r-y-lidar.html#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="r-y-lidar.html#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="r-y-lidar.html#cb2-4" aria-hidden="true" tabindex="-1"></a>dir<span class="ot">&lt;-</span><span class="st">&quot;c:/curso_lidar/&quot;</span></span>
+<span id="cb2-5"><a href="r-y-lidar.html#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(dir)</span>
+<span id="cb2-6"><a href="r-y-lidar.html#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="r-y-lidar.html#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;./temp/&quot;</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-8"><a href="r-y-lidar.html#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;./data/&quot;</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-9"><a href="r-y-lidar.html#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="r-y-lidar.html#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">&quot;./data/&quot;</span>)</span>
+<span id="cb2-11"><a href="r-y-lidar.html#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(<span class="st">&quot;https://raw.githubusercontent.com/juliomsevilla/rlidar/main/data/lidar_data.zip&quot;</span>,</span>
+<span id="cb2-12"><a href="r-y-lidar.html#cb2-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">destfile =</span> <span class="fu">paste</span>(<span class="fu">getwd</span>(), <span class="st">&quot;/lidar_data.zip&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>), </span>
+<span id="cb2-13"><a href="r-y-lidar.html#cb2-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">&quot;curl&quot;</span>, <span class="at">overwrite=</span><span class="cn">TRUE</span>)</span>
+<span id="cb2-14"><a href="r-y-lidar.html#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="r-y-lidar.html#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span>(<span class="fu">paste</span>(<span class="fu">getwd</span>(), <span class="st">&quot;/lidar_data.zip&quot;</span>,<span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb2-16"><a href="r-y-lidar.html#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(dir)</span></code></pre></div>
 </div>
 <div id="preparación-de-los-datos" class="section level2" number="3.2">
 <h2><span class="header-section-number">3.2</span> Preparación de los datos</h2>
 <p>Para comenzar, si analizamos los <em>tiles</em> LiDAR, estos no vienen proyectados, por lo que procederemos a ello. Para hacerlo de forma rápida y automática usaremos una estructura de control <code>for</code> de forma que si previamente hemos listado todos los ficheros LiDAR a reproyectar, abriremos cada uno de ellos con <code>readLAS()</code>se les asigne la proyección que realmente tienen y se guarden con ella en la carpeta <code>temp</code> con <code>writeLAS</code>.</p>
-<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="r-y-lidar.html#cb169-1" aria-hidden="true" tabindex="-1"></a>tiles <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="fu">paste</span>(dir, <span class="st">&quot;data/tiles/&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>), <span class="at">full.names=</span><span class="cn">TRUE</span>)</span>
-<span id="cb169-2"><a href="r-y-lidar.html#cb169-2" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">&quot;./temp/&quot;</span>)</span>
-<span id="cb169-3"><a href="r-y-lidar.html#cb169-3" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span>
-<span id="cb169-4"><a href="r-y-lidar.html#cb169-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb169-5"><a href="r-y-lidar.html#cb169-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb169-6"><a href="r-y-lidar.html#cb169-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (file <span class="cf">in</span> tiles) {</span>
-<span id="cb169-7"><a href="r-y-lidar.html#cb169-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb169-8"><a href="r-y-lidar.html#cb169-8" aria-hidden="true" tabindex="-1"></a>  las<span class="ot">&lt;-</span><span class="fu">readLAS</span>(file)</span>
-<span id="cb169-9"><a href="r-y-lidar.html#cb169-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">epsg</span>(las) <span class="ot">&lt;-</span> <span class="dv">25830</span></span>
-<span id="cb169-10"><a href="r-y-lidar.html#cb169-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">writeLAS</span>(las, <span class="fu">basename</span>(file))</span>
-<span id="cb169-11"><a href="r-y-lidar.html#cb169-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rm</span>(las)</span>
-<span id="cb169-12"><a href="r-y-lidar.html#cb169-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb169-13"><a href="r-y-lidar.html#cb169-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb169-14"><a href="r-y-lidar.html#cb169-14" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(dir)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="r-y-lidar.html#cb3-1" aria-hidden="true" tabindex="-1"></a>tiles <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="fu">paste</span>(dir, <span class="st">&quot;data/tiles/&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>), <span class="at">full.names=</span><span class="cn">TRUE</span>)</span>
+<span id="cb3-2"><a href="r-y-lidar.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">&quot;./temp/&quot;</span>)</span>
+<span id="cb3-3"><a href="r-y-lidar.html#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span>
+<span id="cb3-4"><a href="r-y-lidar.html#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="r-y-lidar.html#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="r-y-lidar.html#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (file <span class="cf">in</span> tiles) {</span>
+<span id="cb3-7"><a href="r-y-lidar.html#cb3-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-8"><a href="r-y-lidar.html#cb3-8" aria-hidden="true" tabindex="-1"></a>  las<span class="ot">&lt;-</span><span class="fu">readLAS</span>(file)</span>
+<span id="cb3-9"><a href="r-y-lidar.html#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">epsg</span>(las) <span class="ot">&lt;-</span> <span class="dv">25830</span></span>
+<span id="cb3-10"><a href="r-y-lidar.html#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">writeLAS</span>(las, <span class="fu">basename</span>(file))</span>
+<span id="cb3-11"><a href="r-y-lidar.html#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rm</span>(las)</span>
+<span id="cb3-12"><a href="r-y-lidar.html#cb3-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-13"><a href="r-y-lidar.html#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="r-y-lidar.html#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(dir)</span></code></pre></div>
 </div>
 <div id="análisis-de-los-datos" class="section level2" number="3.3">
 <h2><span class="header-section-number">3.3</span> Análisis de los datos</h2>
 <p>La librería <code>lidR</code>,para gestionar grandes cantidades de datos, usa un objeto <code>LAScatalog</code> de modo que el procesamiento de cada tesela LiDAR se hace de forma ordenada. El objeto <code>LAScatalog</code> en realidad contiene las referencias geográficas y cabeceras de los ficheros LiDAR que permite ubicar espacialmente y posteriormente aplicar la mayoría de las funciones de <code>lidR</code> como si se tratara de una sola nube de puntos cargada en la memoria de la computadora.</p>
-<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="r-y-lidar.html#cb170-1" aria-hidden="true" tabindex="-1"></a>ctg <span class="ot">&lt;-</span> <span class="fu">readLAScatalog</span>(<span class="st">&quot;./temp/&quot;</span>)</span>
-<span id="cb170-2"><a href="r-y-lidar.html#cb170-2" aria-hidden="true" tabindex="-1"></a>ctg</span>
-<span id="cb170-3"><a href="r-y-lidar.html#cb170-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ctg)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="r-y-lidar.html#cb4-1" aria-hidden="true" tabindex="-1"></a>ctg <span class="ot">&lt;-</span> <span class="fu">readLAScatalog</span>(<span class="st">&quot;./temp/&quot;</span>)</span>
+<span id="cb4-2"><a href="r-y-lidar.html#cb4-2" aria-hidden="true" tabindex="-1"></a>ctg</span>
+<span id="cb4-3"><a href="r-y-lidar.html#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ctg)</span></code></pre></div>
 <p>Una vez creado el objeto <code>LAScatalog</code> procedemos a su validación y estudio con el comando <code>las_check</code>:</p>
-<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="r-y-lidar.html#cb171-1" aria-hidden="true" tabindex="-1"></a><span class="fu">las_check</span>(ctg)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="r-y-lidar.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">las_check</span>(ctg)</span></code></pre></div>
 <p>La clasificación de los puntos terrestres es un paso importante en el procesamiento de datos de nubes de puntos. La distinción entre puntos de suelo y no permite crear un modelo digital del terreno que posteriormente nos permita normalizar los puntos LiDAR, esto es, pasar de altitudes respecto a un determinado nivel de referencia a alturas o cotas respecto a un cero, que, evidentemente, si hablamos de árboles es lo que más nos puede interesar.</p>
 <p>Los datos del ejemplo ya vienen clasificados, pero los volveremos a clasificar para demostrar como lo efectúa la librería <code>lidR</code>. En concreto, esta librería usa dos formas de clasificación: <code>pmf()</code> <span class="citation">(<a href="#ref-R-Zhang2003" role="doc-biblioref">K. Zhang et al. 2003</a>)</span> y <code>csf()</code> <span class="citation">(<a href="#ref-R-Zhang2016" role="doc-biblioref">W. Zhang et al. 2016</a>)</span>, cada uno con parámetros característicos que podremos modificar y es uno de los pasos más críticos y complejos del proceso.</p>
-<p>Una vez que los puntos son clasificados, se asigna el valor de 2 al campo de clasificación del retorno, siguiendo las prescripciones que estandariza la Sociedad Americana de Fotogrametría y Teledetección (<a href="https://www.asprs.org/">ASPRS</a>) para los formatos LAS 1.1, 1.2, 1.3 y 1.4.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
-<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="r-y-lidar.html#cb172-1" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_filter</span>(ctg) <span class="ot">&lt;-</span> <span class="st">&quot;-drop-scan-angle &#39;&gt;=91&#39;&quot;</span></span>
-<span id="cb172-2"><a href="r-y-lidar.html#cb172-2" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(ctg) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(dir,<span class="st">&quot;/temp/&quot;</span>, <span class="st">&quot;{*}_classified&quot;</span>)</span>
-<span id="cb172-3"><a href="r-y-lidar.html#cb172-3" aria-hidden="true" tabindex="-1"></a>classified_ctg <span class="ot">&lt;-</span> <span class="fu">classify_ground</span>(ctg, <span class="fu">csf</span>())</span></code></pre></div>
+<p>Una vez que los puntos son clasificados, se asigna el valor de 2 al campo de clasificación del retorno, siguiendo las prescripciones que estandariza la Sociedad Americana de Fotogrametría y Teledetección (<a href="https://www.asprs.org/">ASPRS</a>) para los formatos LAS 1.1, 1.2, 1.3 y 1.4.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="r-y-lidar.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_filter</span>(ctg) <span class="ot">&lt;-</span> <span class="st">&quot;-drop-scan-angle &#39;&gt;=91&#39;&quot;</span></span>
+<span id="cb6-2"><a href="r-y-lidar.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(ctg) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(dir,<span class="st">&quot;/temp/&quot;</span>, <span class="st">&quot;{*}_classified&quot;</span>)</span>
+<span id="cb6-3"><a href="r-y-lidar.html#cb6-3" aria-hidden="true" tabindex="-1"></a>classified_ctg <span class="ot">&lt;-</span> <span class="fu">classify_ground</span>(ctg, <span class="fu">csf</span>())</span></code></pre></div>
 </div>
 <div id="modelo-digital-del-terreno" class="section level2" number="3.4">
 <h2><span class="header-section-number">3.4</span> Modelo digital del terreno</h2>
 <p>Con la nube de puntos clasificada, al menos en puntos de suelo y no, calcularemos el modelo digital del terreno que posteriormente nos permita normalizar la nube de puntos.</p>
-<p>La librería <code>lidR</code>permite tres métodos de interpolación de los puntos del suelo con el comando <code>grid_terrain</code>: <code>tin</code> (red de triángulos irregulares), <code>knnidw</code> (distancia inversa ponderada) y <code>kriging</code>, de menor a mayor complejidad y uso de recursos en este orden.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<p>La librería <code>lidR</code>permite tres métodos de interpolación de los puntos del suelo con el comando <code>grid_terrain</code>: <code>tin</code> (red de triángulos irregulares), <code>knnidw</code> (distancia inversa ponderada) y <code>kriging</code>, de menor a mayor complejidad y uso de recursos en este orden.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
 <p>En nuestro caso, usamos <code>kriging</code> (<code>lidR</code> usa la librería <code>gstat</code> por si deseamos saber más sobre este método de interpolación probabilístico) porque los otros métodos no se pueden usar debido a los pocos puntos de suelo que tenemos. Si usamos <code>algorithm =tin()</code> por ejemplo, observaremos a un error del tipo <code>convexhull</code> debido a que los puntos de suelo con los que contamos en muchos casos están muy separados físicamente.</p>
-<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="r-y-lidar.html#cb173-1" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(classified_ctg) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(dir,<span class="st">&quot;temp/&quot;</span>, <span class="st">&quot;{*}_dtm&quot;</span>)</span>
-<span id="cb173-2"><a href="r-y-lidar.html#cb173-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb173-3"><a href="r-y-lidar.html#cb173-3" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> <span class="fu">grid_terrain</span>(classified_ctg, <span class="dv">1</span>,  <span class="at">algorithm =</span> <span class="fu">kriging</span>(<span class="at">k =</span> <span class="dv">40</span>), <span class="at">overwrite=</span><span class="cn">TRUE</span>)</span>
-<span id="cb173-4"><a href="r-y-lidar.html#cb173-4" aria-hidden="true" tabindex="-1"></a>dtm</span>
-<span id="cb173-5"><a href="r-y-lidar.html#cb173-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dtm)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="r-y-lidar.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(classified_ctg) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(dir,<span class="st">&quot;temp/&quot;</span>, <span class="st">&quot;{*}_dtm&quot;</span>)</span>
+<span id="cb7-2"><a href="r-y-lidar.html#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="r-y-lidar.html#cb7-3" aria-hidden="true" tabindex="-1"></a>dtm <span class="ot">&lt;-</span> <span class="fu">grid_terrain</span>(classified_ctg, <span class="dv">1</span>,  <span class="at">algorithm =</span> <span class="fu">kriging</span>(<span class="at">k =</span> <span class="dv">40</span>), <span class="at">overwrite=</span><span class="cn">TRUE</span>)</span>
+<span id="cb7-4"><a href="r-y-lidar.html#cb7-4" aria-hidden="true" tabindex="-1"></a>dtm</span>
+<span id="cb7-5"><a href="r-y-lidar.html#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dtm)</span></code></pre></div>
 </div>
 <div id="modelo-digital-de-las-elevaciones" class="section level2" number="3.5">
 <h2><span class="header-section-number">3.5</span> Modelo digital de las elevaciones</h2>
-<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb174-1"><a href="r-y-lidar.html#cb174-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Normalizamos los datos y creamos el modelo digital de elevaciones normalizado</span></span>
-<span id="cb174-2"><a href="r-y-lidar.html#cb174-2" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(classified_ctg) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(dir,<span class="st">&quot;/temp/&quot;</span>, <span class="st">&quot;{*}_norm&quot;</span>)</span>
-<span id="cb174-3"><a href="r-y-lidar.html#cb174-3" aria-hidden="true" tabindex="-1"></a>ctg_norm <span class="ot">&lt;-</span> <span class="fu">normalize_height</span>(classified_ctg, dtm)</span>
-<span id="cb174-4"><a href="r-y-lidar.html#cb174-4" aria-hidden="true" tabindex="-1"></a>ctg_norm</span>
-<span id="cb174-5"><a href="r-y-lidar.html#cb174-5" aria-hidden="true" tabindex="-1"></a><span class="fu">las_check</span>(ctg_norm)</span>
-<span id="cb174-6"><a href="r-y-lidar.html#cb174-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb174-7"><a href="r-y-lidar.html#cb174-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb174-8"><a href="r-y-lidar.html#cb174-8" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_filter</span>(ctg_norm) <span class="ot">&lt;-</span> <span class="st">&quot;-drop_z_below 0&quot;</span> <span class="co"># Ignoramos los puntos con cota por debajo de cero</span></span>
-<span id="cb174-9"><a href="r-y-lidar.html#cb174-9" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(ctg_norm) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(dir,<span class="st">&quot;/temp/&quot;</span>, <span class="st">&quot;{*}_mds&quot;</span>)</span>
-<span id="cb174-10"><a href="r-y-lidar.html#cb174-10" aria-hidden="true" tabindex="-1"></a>mdv <span class="ot">&lt;-</span> <span class="fu">grid_canopy</span>(ctg_norm, <span class="dv">1</span>, <span class="fu">pitfree</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">15</span>), <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">subcircle =</span> <span class="fl">0.2</span>))</span>
-<span id="cb174-11"><a href="r-y-lidar.html#cb174-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mdv)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="r-y-lidar.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Normalizamos los datos y creamos el modelo digital de elevaciones normalizado</span></span>
+<span id="cb8-2"><a href="r-y-lidar.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(classified_ctg) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(dir,<span class="st">&quot;/temp/&quot;</span>, <span class="st">&quot;{*}_norm&quot;</span>)</span>
+<span id="cb8-3"><a href="r-y-lidar.html#cb8-3" aria-hidden="true" tabindex="-1"></a>ctg_norm <span class="ot">&lt;-</span> <span class="fu">normalize_height</span>(classified_ctg, dtm)</span>
+<span id="cb8-4"><a href="r-y-lidar.html#cb8-4" aria-hidden="true" tabindex="-1"></a>ctg_norm</span>
+<span id="cb8-5"><a href="r-y-lidar.html#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">las_check</span>(ctg_norm)</span>
+<span id="cb8-6"><a href="r-y-lidar.html#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="r-y-lidar.html#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="r-y-lidar.html#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_filter</span>(ctg_norm) <span class="ot">&lt;-</span> <span class="st">&quot;-drop_z_below 0&quot;</span> <span class="co"># Ignoramos los puntos con cota por debajo de cero</span></span>
+<span id="cb8-9"><a href="r-y-lidar.html#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(ctg_norm) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(dir,<span class="st">&quot;/temp/&quot;</span>, <span class="st">&quot;{*}_mds&quot;</span>)</span>
+<span id="cb8-10"><a href="r-y-lidar.html#cb8-10" aria-hidden="true" tabindex="-1"></a>mdv <span class="ot">&lt;-</span> <span class="fu">grid_canopy</span>(ctg_norm, <span class="dv">1</span>, <span class="fu">pitfree</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">15</span>), <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">subcircle =</span> <span class="fl">0.2</span>))</span>
+<span id="cb8-11"><a href="r-y-lidar.html#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mdv)</span></code></pre></div>
 </div>
 <div id="métodos-de-masa" class="section level2" number="3.6">
 <h2><span class="header-section-number">3.6</span> Métodos de masa</h2>
 <p>Para comenzar cargaremos los puntos de muestreo efectuados en campo:</p>
-<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="r-y-lidar.html#cb175-1" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_filter</span>(ctg_norm) <span class="ot">&lt;-</span> <span class="st">&quot;-drop_z_below 0&quot;</span></span>
-<span id="cb175-2"><a href="r-y-lidar.html#cb175-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb175-3"><a href="r-y-lidar.html#cb175-3" aria-hidden="true" tabindex="-1"></a>plots <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;./data/parc.shp&quot;</span>)</span>
-<span id="cb175-4"><a href="r-y-lidar.html#cb175-4" aria-hidden="true" tabindex="-1"></a>plots</span>
-<span id="cb175-5"><a href="r-y-lidar.html#cb175-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(plots, <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="r-y-lidar.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_filter</span>(ctg_norm) <span class="ot">&lt;-</span> <span class="st">&quot;-drop_z_below 0&quot;</span></span>
+<span id="cb9-2"><a href="r-y-lidar.html#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="r-y-lidar.html#cb9-3" aria-hidden="true" tabindex="-1"></a>plots <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;./data/parc.shp&quot;</span>)</span>
+<span id="cb9-4"><a href="r-y-lidar.html#cb9-4" aria-hidden="true" tabindex="-1"></a>plots</span>
+<span id="cb9-5"><a href="r-y-lidar.html#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(plots, <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
 <p>Para recortar estas parcelas de la nube de puntos podemos usar el comando <code>plot_metrics</code> (además guardaremos estos recortes para su uso futuro):</p>
-<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb176-1"><a href="r-y-lidar.html#cb176-1" aria-hidden="true" tabindex="-1"></a>tiles_norm <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="fu">paste</span>(dir, <span class="st">&quot;temp/&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>), <span class="at">full.names =</span> <span class="cn">TRUE</span>, <span class="at">pattern =</span> <span class="st">&quot;(.*)norm.las$&quot;</span>)</span>
-<span id="cb176-2"><a href="r-y-lidar.html#cb176-2" aria-hidden="true" tabindex="-1"></a>ctg_norm <span class="ot">&lt;-</span> <span class="fu">readLAScatalog</span>(tiles_norm)</span>
-<span id="cb176-3"><a href="r-y-lidar.html#cb176-3" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="fu">plot_metrics</span>(ctg_norm, .stdmetrics_z, plots, <span class="at">radius =</span> <span class="dv">9</span>)</span>
-<span id="cb176-4"><a href="r-y-lidar.html#cb176-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(stats)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="r-y-lidar.html#cb10-1" aria-hidden="true" tabindex="-1"></a>tiles_norm <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="fu">paste</span>(dir, <span class="st">&quot;temp/&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>), <span class="at">full.names =</span> <span class="cn">TRUE</span>, <span class="at">pattern =</span> <span class="st">&quot;(.*)norm.las$&quot;</span>)</span>
+<span id="cb10-2"><a href="r-y-lidar.html#cb10-2" aria-hidden="true" tabindex="-1"></a>ctg_norm <span class="ot">&lt;-</span> <span class="fu">readLAScatalog</span>(tiles_norm)</span>
+<span id="cb10-3"><a href="r-y-lidar.html#cb10-3" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="fu">plot_metrics</span>(ctg_norm, .stdmetrics_z, plots, <span class="at">radius =</span> <span class="dv">9</span>)</span>
+<span id="cb10-4"><a href="r-y-lidar.html#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(stats)</span></code></pre></div>
 <p>Cargamos los datos medidos en las parcelas y se lo añadimos a los datos lidar. A continuación realizamos un análisis de correlación entre las variables de la nube de puntos y la futura variable dependiente (en este caso <code>vcc</code>).</p>
 <p>Se define por correlación a la dirección y magnitud de la asociación entre dos variables cuantitativas, es decir que grado de relación hay entre ellas y si el aumento o disminución de una provoca el aumento o disminución de la otra.</p>
 <p>El grado de correlación se mide mediante dos coeficientes: el coeficiente de correlación de Pearson y el coeficiente de correlación de Spearman, análogos en significado pero disimiles en su aplicación.</p>
 <p>El coeficiente de correlación de Pearson es un coeficiente adimensional que va fluctúa entre -1 y +1, donde el primer valor indica la existencia de una asociación perfecta en sentido decreciente y el segundo en sentido creciente. Evidentemente, el valor cero, indica la inexistencia de relación.</p>
 <p>El coeficiente de correlación de Pearson (a veces conocido como coeficiente de correlación a secas) es aplicable para variables cuantitativas que se relacionan de forma lineal. Por otro lado, el coeficiente de correlación de Spearman, es un evaluador de correlación, homólogo en su valor (-1 a +1) al de Pearson, pero con un carácter no paramétrico, lo que implica que la relación entre las variables puede no ser lineal, que no es tan exigente en la existencia de normalidad en la población y aplicable incluso a variables ordinales.</p>
 <p>Centrándonos en el coeficiente de correlación de Pearson, dado que tratamos variables cuantitativas, empezamos cargando los datos de volumenes de las parcelas de muestreo, pasando posteriormente a unirlas a la tabla con los estadísticos descriptivos de la nube de puntos de esas parcelas obtenido anteriormente. Para finalizar mostramos las seis variables más relacionadas con la futura variable dependiente.</p>
-<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb177-1"><a href="r-y-lidar.html#cb177-1" aria-hidden="true" tabindex="-1"></a>vcc <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">&quot;data/muestreo.xlsx&quot;</span>)</span>
-<span id="cb177-2"><a href="r-y-lidar.html#cb177-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(vcc)</span>
-<span id="cb177-3"><a href="r-y-lidar.html#cb177-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb177-4"><a href="r-y-lidar.html#cb177-4" aria-hidden="true" tabindex="-1"></a>vcc <span class="ot">&lt;-</span> <span class="fu">left_join</span>(vcc, stats, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;parc&quot;</span> <span class="ot">=</span> <span class="st">&quot;id&quot;</span>))</span>
-<span id="cb177-5"><a href="r-y-lidar.html#cb177-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb177-6"><a href="r-y-lidar.html#cb177-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> vcc <span class="sc">%&gt;%</span> </span>
-<span id="cb177-7"><a href="r-y-lidar.html#cb177-7" aria-hidden="true" tabindex="-1"></a>      <span class="co">#select(-c(parc, X, Y))%&gt;%</span></span>
-<span id="cb177-8"><a href="r-y-lidar.html#cb177-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cor</span>()<span class="sc">%&gt;%</span></span>
-<span id="cb177-9"><a href="r-y-lidar.html#cb177-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">data.frame</span>()<span class="sc">%&gt;%</span></span>
-<span id="cb177-10"><a href="r-y-lidar.html#cb177-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_rownames</span>(<span class="at">var =</span> <span class="st">&quot;lidar_stat&quot;</span>)<span class="sc">%&gt;%</span></span>
-<span id="cb177-11"><a href="r-y-lidar.html#cb177-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(lidar_stat<span class="sc">!=</span><span class="st">&#39;vcc&#39;</span>)<span class="sc">%&gt;%</span></span>
-<span id="cb177-12"><a href="r-y-lidar.html#cb177-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">arrange</span>(<span class="fu">desc</span>(vcc))</span>
-<span id="cb177-13"><a href="r-y-lidar.html#cb177-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb177-14"><a href="r-y-lidar.html#cb177-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb177-15"><a href="r-y-lidar.html#cb177-15" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df, <span class="dv">3</span>)</span>
-<span id="cb177-16"><a href="r-y-lidar.html#cb177-16" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(df, <span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="r-y-lidar.html#cb11-1" aria-hidden="true" tabindex="-1"></a>vcc <span class="ot">&lt;-</span> readxl<span class="sc">::</span><span class="fu">read_excel</span>(<span class="st">&quot;data/muestreo.xlsx&quot;</span>)</span>
+<span id="cb11-2"><a href="r-y-lidar.html#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(vcc)</span>
+<span id="cb11-3"><a href="r-y-lidar.html#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="r-y-lidar.html#cb11-4" aria-hidden="true" tabindex="-1"></a>vcc <span class="ot">&lt;-</span> <span class="fu">left_join</span>(vcc, stats, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;parc&quot;</span> <span class="ot">=</span> <span class="st">&quot;id&quot;</span>))</span>
+<span id="cb11-5"><a href="r-y-lidar.html#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="r-y-lidar.html#cb11-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> vcc <span class="sc">%&gt;%</span> </span>
+<span id="cb11-7"><a href="r-y-lidar.html#cb11-7" aria-hidden="true" tabindex="-1"></a>      <span class="co">#select(-c(parc, X, Y))%&gt;%</span></span>
+<span id="cb11-8"><a href="r-y-lidar.html#cb11-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cor</span>()<span class="sc">%&gt;%</span></span>
+<span id="cb11-9"><a href="r-y-lidar.html#cb11-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">data.frame</span>()<span class="sc">%&gt;%</span></span>
+<span id="cb11-10"><a href="r-y-lidar.html#cb11-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">add_rownames</span>(<span class="at">var =</span> <span class="st">&quot;lidar_stat&quot;</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb11-11"><a href="r-y-lidar.html#cb11-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(lidar_stat<span class="sc">!=</span><span class="st">&#39;vcc&#39;</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb11-12"><a href="r-y-lidar.html#cb11-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">arrange</span>(<span class="fu">desc</span>(vcc))</span>
+<span id="cb11-13"><a href="r-y-lidar.html#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="r-y-lidar.html#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="r-y-lidar.html#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df, <span class="dv">3</span>)</span>
+<span id="cb11-16"><a href="r-y-lidar.html#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(df, <span class="dv">3</span>)</span></code></pre></div>
 <p>Analizamos la variable dependiente</p>
-<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb178-1"><a href="r-y-lidar.html#cb178-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(vcc<span class="sc">$</span>vcc)</span>
-<span id="cb178-2"><a href="r-y-lidar.html#cb178-2" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(vcc<span class="sc">$</span>vcc)</span>
-<span id="cb178-3"><a href="r-y-lidar.html#cb178-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb178-4"><a href="r-y-lidar.html#cb178-4" aria-hidden="true" tabindex="-1"></a>plotn <span class="ot">&lt;-</span> <span class="cf">function</span>(x,<span class="at">main=</span><span class="st">&quot;Histograma de frecuencias </span><span class="sc">\n</span><span class="st">y distribución normal&quot;</span>,</span>
-<span id="cb178-5"><a href="r-y-lidar.html#cb178-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">xlab=</span><span class="st">&quot;X&quot;</span>,<span class="at">ylab=</span><span class="st">&quot;Densidad&quot;</span>) {</span>
-<span id="cb178-6"><a href="r-y-lidar.html#cb178-6" aria-hidden="true" tabindex="-1"></a>  min <span class="ot">&lt;-</span> <span class="fu">min</span>(x)</span>
-<span id="cb178-7"><a href="r-y-lidar.html#cb178-7" aria-hidden="true" tabindex="-1"></a>  max <span class="ot">&lt;-</span> <span class="fu">max</span>(x)</span>
-<span id="cb178-8"><a href="r-y-lidar.html#cb178-8" aria-hidden="true" tabindex="-1"></a>  media <span class="ot">&lt;-</span> <span class="fu">mean</span>(x)</span>
-<span id="cb178-9"><a href="r-y-lidar.html#cb178-9" aria-hidden="true" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> <span class="fu">sd</span>(x)</span>
-<span id="cb178-10"><a href="r-y-lidar.html#cb178-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hist</span>(x,<span class="at">freq=</span>F,<span class="at">main=</span>main,<span class="at">xlab=</span>xlab,<span class="at">ylab=</span>ylab)</span>
-<span id="cb178-11"><a href="r-y-lidar.html#cb178-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">curve</span>(<span class="fu">dnorm</span>(x,media,dt), min, max,<span class="at">add =</span> T,<span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span>
-<span id="cb178-12"><a href="r-y-lidar.html#cb178-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb178-13"><a href="r-y-lidar.html#cb178-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb178-14"><a href="r-y-lidar.html#cb178-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plotn</span>(<span class="fu">sqrt</span>(vcc<span class="sc">$</span>vcc))</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="r-y-lidar.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(vcc<span class="sc">$</span>vcc)</span>
+<span id="cb12-2"><a href="r-y-lidar.html#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(vcc<span class="sc">$</span>vcc)</span>
+<span id="cb12-3"><a href="r-y-lidar.html#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="r-y-lidar.html#cb12-4" aria-hidden="true" tabindex="-1"></a>plotn <span class="ot">&lt;-</span> <span class="cf">function</span>(x,<span class="at">main=</span><span class="st">&quot;Histograma de frecuencias </span><span class="sc">\n</span><span class="st">y distribución normal&quot;</span>,</span>
+<span id="cb12-5"><a href="r-y-lidar.html#cb12-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">xlab=</span><span class="st">&quot;X&quot;</span>,<span class="at">ylab=</span><span class="st">&quot;Densidad&quot;</span>) {</span>
+<span id="cb12-6"><a href="r-y-lidar.html#cb12-6" aria-hidden="true" tabindex="-1"></a>  min <span class="ot">&lt;-</span> <span class="fu">min</span>(x)</span>
+<span id="cb12-7"><a href="r-y-lidar.html#cb12-7" aria-hidden="true" tabindex="-1"></a>  max <span class="ot">&lt;-</span> <span class="fu">max</span>(x)</span>
+<span id="cb12-8"><a href="r-y-lidar.html#cb12-8" aria-hidden="true" tabindex="-1"></a>  media <span class="ot">&lt;-</span> <span class="fu">mean</span>(x)</span>
+<span id="cb12-9"><a href="r-y-lidar.html#cb12-9" aria-hidden="true" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> <span class="fu">sd</span>(x)</span>
+<span id="cb12-10"><a href="r-y-lidar.html#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hist</span>(x,<span class="at">freq=</span>F,<span class="at">main=</span>main,<span class="at">xlab=</span>xlab,<span class="at">ylab=</span>ylab)</span>
+<span id="cb12-11"><a href="r-y-lidar.html#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">curve</span>(<span class="fu">dnorm</span>(x,media,dt), min, max,<span class="at">add =</span> T,<span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb12-12"><a href="r-y-lidar.html#cb12-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-13"><a href="r-y-lidar.html#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="r-y-lidar.html#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plotn</span>(<span class="fu">sqrt</span>(vcc<span class="sc">$</span>vcc))</span></code></pre></div>
 <p>Construimos el modelo</p>
-<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb179-1"><a href="r-y-lidar.html#cb179-1" aria-hidden="true" tabindex="-1"></a>lm<span class="ot">&lt;-</span><span class="fu">lm</span>(vcc<span class="sc">~</span>zq90, <span class="at">data=</span>vcc)</span>
-<span id="cb179-2"><a href="r-y-lidar.html#cb179-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm)</span>
-<span id="cb179-3"><a href="r-y-lidar.html#cb179-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb179-4"><a href="r-y-lidar.html#cb179-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(vcc<span class="sc">$</span>vcc, <span class="fu">predict</span>(lm))</span>
-<span id="cb179-5"><a href="r-y-lidar.html#cb179-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="dv">0</span>,<span class="dv">1</span>)</span>
-<span id="cb179-6"><a href="r-y-lidar.html#cb179-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb179-7"><a href="r-y-lidar.html#cb179-7" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>)) </span>
-<span id="cb179-8"><a href="r-y-lidar.html#cb179-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lm)</span>
-<span id="cb179-9"><a href="r-y-lidar.html#cb179-9" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
-<span id="cb179-10"><a href="r-y-lidar.html#cb179-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb179-11"><a href="r-y-lidar.html#cb179-11" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(<span class="fu">residuals</span>(lm))</span>
-<span id="cb179-12"><a href="r-y-lidar.html#cb179-12" aria-hidden="true" tabindex="-1"></a><span class="fu">bptest</span>(lm)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="r-y-lidar.html#cb13-1" aria-hidden="true" tabindex="-1"></a>lm<span class="ot">&lt;-</span><span class="fu">lm</span>(vcc<span class="sc">~</span>zq90, <span class="at">data=</span>vcc)</span>
+<span id="cb13-2"><a href="r-y-lidar.html#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm)</span>
+<span id="cb13-3"><a href="r-y-lidar.html#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="r-y-lidar.html#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(vcc<span class="sc">$</span>vcc, <span class="fu">predict</span>(lm))</span>
+<span id="cb13-5"><a href="r-y-lidar.html#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="dv">0</span>,<span class="dv">1</span>)</span>
+<span id="cb13-6"><a href="r-y-lidar.html#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="r-y-lidar.html#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>)) </span>
+<span id="cb13-8"><a href="r-y-lidar.html#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lm)</span>
+<span id="cb13-9"><a href="r-y-lidar.html#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb13-10"><a href="r-y-lidar.html#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="r-y-lidar.html#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(<span class="fu">residuals</span>(lm))</span>
+<span id="cb13-12"><a href="r-y-lidar.html#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="fu">bptest</span>(lm)</span></code></pre></div>
 <p>Calculamos los estadísticos de los recintos. El radio de nuestras parcelas es de 9 metros, por lo que la superficie es de 254.469004941 m2 y esto implica una resolución de 15.95208</p>
-<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb180-1"><a href="r-y-lidar.html#cb180-1" aria-hidden="true" tabindex="-1"></a>pixel <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(pi<span class="sc">*</span><span class="dv">9</span><span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb180-2"><a href="r-y-lidar.html#cb180-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb180-3"><a href="r-y-lidar.html#cb180-3" aria-hidden="true" tabindex="-1"></a>metrics <span class="ot">&lt;-</span> <span class="fu">grid_metrics</span>(ctg_norm, .stdmetrics_z, <span class="at">res =</span> pixel)</span>
-<span id="cb180-4"><a href="r-y-lidar.html#cb180-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb180-5"><a href="r-y-lidar.html#cb180-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(metrics<span class="sc">$</span>zq90)</span>
-<span id="cb180-6"><a href="r-y-lidar.html#cb180-6" aria-hidden="true" tabindex="-1"></a>vcc_pred <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">899.025+73.630</span><span class="sc">*</span>metrics<span class="sc">$</span>zq90</span>
-<span id="cb180-7"><a href="r-y-lidar.html#cb180-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(vcc_pred)</span>
-<span id="cb180-8"><a href="r-y-lidar.html#cb180-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb180-9"><a href="r-y-lidar.html#cb180-9" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(vcc_pred, <span class="fu">paste</span>(dir, <span class="st">&quot;/temp/&quot;</span>, <span class="st">&quot;vcc_pred.tif&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>), <span class="at">datatype=</span><span class="st">&#39;FLT4S&#39;</span>,<span class="at">overwrite =</span> <span class="cn">TRUE</span>, <span class="at">bylayer =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="r-y-lidar.html#cb14-1" aria-hidden="true" tabindex="-1"></a>pixel <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(pi<span class="sc">*</span><span class="dv">9</span><span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb14-2"><a href="r-y-lidar.html#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="r-y-lidar.html#cb14-3" aria-hidden="true" tabindex="-1"></a>metrics <span class="ot">&lt;-</span> <span class="fu">grid_metrics</span>(ctg_norm, .stdmetrics_z, <span class="at">res =</span> pixel)</span>
+<span id="cb14-4"><a href="r-y-lidar.html#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="r-y-lidar.html#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(metrics<span class="sc">$</span>zq90)</span>
+<span id="cb14-6"><a href="r-y-lidar.html#cb14-6" aria-hidden="true" tabindex="-1"></a>vcc_pred <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">899.025+73.630</span><span class="sc">*</span>metrics<span class="sc">$</span>zq90</span>
+<span id="cb14-7"><a href="r-y-lidar.html#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(vcc_pred)</span>
+<span id="cb14-8"><a href="r-y-lidar.html#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="r-y-lidar.html#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(vcc_pred, <span class="fu">paste</span>(dir, <span class="st">&quot;/temp/&quot;</span>, <span class="st">&quot;vcc_pred.tif&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>), <span class="at">datatype=</span><span class="st">&#39;FLT4S&#39;</span>,<span class="at">overwrite =</span> <span class="cn">TRUE</span>, <span class="at">bylayer =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 </div>
 <div id="segmentación-de-árboles" class="section level2" number="3.7">
 <h2><span class="header-section-number">3.7</span> Segmentación de árboles</h2>
-<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb181-1"><a href="r-y-lidar.html#cb181-1" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(ctg_norm) <span class="ot">&lt;-</span> <span class="st">&quot;&quot;</span></span>
-<span id="cb181-2"><a href="r-y-lidar.html#cb181-2" aria-hidden="true" tabindex="-1"></a>ttops <span class="ot">&lt;-</span> <span class="fu">find_trees</span>(ctg_norm, <span class="fu">lmf</span>(<span class="dv">4</span>), <span class="at">uniqueness =</span> <span class="st">&quot;bitmerge&quot;</span>)</span>
-<span id="cb181-3"><a href="r-y-lidar.html#cb181-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb181-4"><a href="r-y-lidar.html#cb181-4" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(ctg_norm) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(dir,<span class="st">&quot;/temp/&quot;</span>, <span class="st">&quot;{*}_segmented&quot;</span>)</span>
-<span id="cb181-5"><a href="r-y-lidar.html#cb181-5" aria-hidden="true" tabindex="-1"></a>segm <span class="ot">&lt;-</span> <span class="fu">dalponte2016</span>(mdv, ttops)</span>
-<span id="cb181-6"><a href="r-y-lidar.html#cb181-6" aria-hidden="true" tabindex="-1"></a>ctg_segmented <span class="ot">&lt;-</span> <span class="fu">segment_trees</span>(ctg_norm, segm)</span>
-<span id="cb181-7"><a href="r-y-lidar.html#cb181-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb181-8"><a href="r-y-lidar.html#cb181-8" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(ctg_segmented) <span class="ot">&lt;-</span> <span class="st">&quot;&quot;</span></span>
-<span id="cb181-9"><a href="r-y-lidar.html#cb181-9" aria-hidden="true" tabindex="-1"></a>lasplot <span class="ot">&lt;-</span> <span class="fu">clip_circle</span>(ctg_segmented, <span class="fl">599358.8984</span>,<span class="fl">4734939.2286</span>,  <span class="dv">50</span>)</span>
-<span id="cb181-10"><a href="r-y-lidar.html#cb181-10" aria-hidden="true" tabindex="-1"></a><span class="co">#plot(lasplot, color = &quot;treeID&quot;, bg = &quot;white&quot;, size = 4)</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="r-y-lidar.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(ctg_norm) <span class="ot">&lt;-</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb15-2"><a href="r-y-lidar.html#cb15-2" aria-hidden="true" tabindex="-1"></a>ttops <span class="ot">&lt;-</span> <span class="fu">find_trees</span>(ctg_norm, <span class="fu">lmf</span>(<span class="dv">4</span>), <span class="at">uniqueness =</span> <span class="st">&quot;bitmerge&quot;</span>)</span>
+<span id="cb15-3"><a href="r-y-lidar.html#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="r-y-lidar.html#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(ctg_norm) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(dir,<span class="st">&quot;/temp/&quot;</span>, <span class="st">&quot;{*}_segmented&quot;</span>)</span>
+<span id="cb15-5"><a href="r-y-lidar.html#cb15-5" aria-hidden="true" tabindex="-1"></a>segm <span class="ot">&lt;-</span> <span class="fu">dalponte2016</span>(mdv, ttops)</span>
+<span id="cb15-6"><a href="r-y-lidar.html#cb15-6" aria-hidden="true" tabindex="-1"></a>ctg_segmented <span class="ot">&lt;-</span> <span class="fu">segment_trees</span>(ctg_norm, segm)</span>
+<span id="cb15-7"><a href="r-y-lidar.html#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="r-y-lidar.html#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">opt_output_files</span>(ctg_segmented) <span class="ot">&lt;-</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb15-9"><a href="r-y-lidar.html#cb15-9" aria-hidden="true" tabindex="-1"></a>lasplot <span class="ot">&lt;-</span> <span class="fu">clip_circle</span>(ctg_segmented, <span class="fl">599358.8984</span>,<span class="fl">4734939.2286</span>,  <span class="dv">50</span>)</span>
+<span id="cb15-10"><a href="r-y-lidar.html#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co">#plot(lasplot, color = &quot;treeID&quot;, bg = &quot;white&quot;, size = 4)</span></span></code></pre></div>
 
 </div>
 </div>
@@ -452,9 +452,9 @@ Zhang, Wuming, Jianbo Qi, Peng Wan, Hongtao Wang, Donghui Xie, Xiaoyan Wang, and
 </div>
 <div class="footnotes">
 <hr />
-<ol start="2">
-<li id="fn2"><p>El comando <code>classify_ground</code> no se limita solo a estos dos algoritmos, si no que la librería <code>lidR</code> permite añadir todo aquel algoritmo del que dispongamos fácilmente.<a href="r-y-lidar.html#fnref2" class="footnote-back">↩︎</a></p></li>
-<li id="fn3"><p>El comando <code>grid_terrain</code> no se limita solo a estos tres algoritmos, si no que la librería <code>lidR</code> permite añadir todo aquel algoritmo del que dispongamos fácilmente.<a href="r-y-lidar.html#fnref3" class="footnote-back">↩︎</a></p></li>
+<ol start="1">
+<li id="fn1"><p>El comando <code>classify_ground</code> no se limita solo a estos dos algoritmos, si no que la librería <code>lidR</code> permite añadir todo aquel algoritmo del que dispongamos fácilmente.<a href="r-y-lidar.html#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>El comando <code>grid_terrain</code> no se limita solo a estos tres algoritmos, si no que la librería <code>lidR</code> permite añadir todo aquel algoritmo del que dispongamos fácilmente.<a href="r-y-lidar.html#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

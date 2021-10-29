@@ -72,7 +72,7 @@ Un sistema LiDAR aerotransportado se compone, fundamentalmente de los siguientes
 
 <center>
 
-[![Sistema LiDAR aerotransportado. Imagen: http://dielmo.com/](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/lidar-aerotransportado-01.jpg "Sistema LiDAR aerotransportado. Imagen: http://dielmo.com/")](http://dielmo.com/)
+[![Sistema LiDAR aerotransportado. Imagen: http://dielmo.com/](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/lidar-aerotransportado-01.jpg "Sistema LiDAR aerotransportado. Imagen: http://dielmo.com/")](http://dielmo.com/) Sistema LiDAR aerotransportado. Fuente: <http://dielmo.com/>
 
 </center>
 
@@ -84,7 +84,7 @@ Muy sintéticamente, podemos conocer la altitud de los objetos gracias a que es 
 
 El escaneo del terreno se puede realizar de muy diversas formas y generalmente se adapta a las características del mismo. Por otro lado, la cantidad de puntos que obtenemos del terreno se denomina densidad de escaneo, en términos de puntos/m^2^ del terreno[^lidar-1] y es relación directa de:
 
-[^lidar-1]: 2 pts/m^2^ implica que en un 95% de las veces, si escogemos aleatoriamente un metro cuadrado del terreno, nos encontraremos al menos 2 retornos
+[^lidar-1]: Desde su creación, existen diversos formatos de archivo `*.las`, siendo el más actual LAS 1.4 que fue aprobado en noviembre de 2011 por la ASPRS ([https://www.asprs.org/divisions-committees/lidar-division/laser-las-file-format-exchange-activities)](https://www.asprs.org/divisions-committees/lidar-division/laser-las-file-format-exchange-activities).)
 
 -   la velocidad de vuelo, altura de vuelo respecto al terreno,
 -   ángulo de escaneo o FOV (Field of View) y
@@ -100,7 +100,7 @@ Mención aparte requiere la capacidad multirretorno del sensor LiDAR. En superfi
 
 <center>
 
-![Fuente: esri.com](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/ESRI_multiretorno.png "Fuente: esri.com")
+![Fuente original: esri.com](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/ESRI_multiretorno.png "Fuente: esri.com")
 
 </center>
 
@@ -178,6 +178,16 @@ Mediante muy diversos algoritmos podremos "descubrir" sobre que tipo de objeto h
 | 64-255                 | Definido por el usuario                        |
 +------------------------+------------------------------------------------+
 
+<center>
+
+![](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/puntos_clasificados1.png "Nube de puntos clasificada. Fuente: ign.es")
+
+</center>
+
+<center>
+
+![](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/puntos_clasificados2.png "Nube de puntos clasificada. Fuente: ign.es") Fuente: ign.es
+
 </center>
 
 ## Estimación de las variables de la masa forestal
@@ -217,5 +227,35 @@ Finalmente, conocida la relación del volumen de los árboles con alguna o algun
 <center>
 
 ![](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/vcc_raster.png)
+
+</center>
+
+De una forma resumida, el flujo de trabajo será el siguiente:
+
+1.  Captura del dato LiDAR
+
+2.  Limpieza y filtrado de los datos LiDAR
+
+3.  Clasificación de los retornos
+
+4.  Generación de los modelos digitales del terreno y de las elevaciones
+
+5.  Normalización
+
+6.  Medición de las parcelas de campo
+
+7.  Recorte de las parcelas de campo en la nube de puntos LiDAR
+
+8.  Cálculo de los estadísticos descriptivos de la nube de puntos LiDAR en las parcelas de campo
+
+9.  Ajuste de los modelos de transición por estrato
+
+10. Cálculo de los estadísticos descriptivos de la nube de puntos LiDAR en todo el monte
+
+11. Aplicación de los modelos de transición a todo el monte y obtención del modelo digital de la variable forestal
+
+<center>
+
+![](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/flujo_ABA.png)
 
 </center>

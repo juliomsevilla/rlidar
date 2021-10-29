@@ -47,7 +47,7 @@ setwd(dir)
 
 ```
 
-## Preparación de los datos
+## Limpieza y filtrado de los datos LiDAR
 
 Para comenzar, si analizamos los *tiles* LiDAR, estos no vienen proyectados, por lo que procederemos a ello. Para hacerlo de forma rápida y automática usaremos una estructura de control `for` de forma que si previamente hemos listado todos los ficheros LiDAR a reproyectar, abriremos cada uno de ellos con `readLAS()`se les asigne la proyección que realmente tienen y se guarden con ella en la carpeta `temp` con `writeLAS`.
 
@@ -68,8 +68,6 @@ for (file in tiles) {
 setwd(dir)
 ```
 
-## Análisis de los datos
-
 La librería `lidR`,para gestionar grandes cantidades de datos, usa un objeto `LAScatalog` de modo que el procesamiento de cada tesela LiDAR se hace de forma ordenada. El objeto `LAScatalog` en realidad contiene las referencias geográficas y cabeceras de los ficheros LiDAR que permite ubicar espacialmente y posteriormente aplicar la mayoría de las funciones de `lidR` como si se tratara de una sola nube de puntos cargada en la memoria de la computadora.
 
 ```{r catalogo, eval = FALSE}
@@ -84,6 +82,7 @@ Una vez creado el objeto `LAScatalog` procedemos a su validación y estudio con 
 las_check(ctg)
 ```
 
+## Clasificación de los retornos
 La clasificación de los puntos terrestres es un paso importante en el procesamiento de datos de nubes de puntos. La distinción entre puntos de suelo y no permite crear un modelo digital del terreno que posteriormente nos permita normalizar los puntos LiDAR, esto es, pasar de altitudes respecto a un determinado nivel de referencia a alturas o cotas respecto a un cero, que, evidentemente, si hablamos de árboles es lo que más nos puede interesar.
 
 Los datos del ejemplo ya vienen clasificados, pero los volveremos a clasificar para demostrar como lo efectúa la librería `lidR`. En concreto, esta librería usa dos formas de clasificación: `pmf()` [@R-Zhang2003] y `csf()` [@R-Zhang2016], cada uno con parámetros característicos que podremos modificar y es uno de los pasos más críticos y complejos del proceso.
@@ -102,7 +101,7 @@ classified_ctg <- classify_ground(ctg, csf())
 classified_ctg <- ctg
 ```
 
-## Modelo digital del terreno
+## Generación de los modelos digitales del terreno y de las elevaciones
 
 Con la nube de puntos clasificada, al menos en puntos de suelo y no, calcularemos el modelo digital del terreno que posteriormente nos permita normalizar la nube de puntos.
 
@@ -121,16 +120,19 @@ plot(dtm)
 
 ```
 
-## Modelo digital de las elevaciones
+## Normalización
 
-```{r mde, eval = FALSE}
+```{r normalizacion, eval = FALSE}
 # Normalizamos los datos y creamos el modelo digital de elevaciones normalizado
 opt_output_files(classified_ctg) <- paste0(dir,"/temp/", "{*}_norm")
 ctg_norm <- normalize_height(classified_ctg, dtm)
 ctg_norm
 las_check(ctg_norm)
+```
 
 
+
+```{r mde, eval = FALSE}
 opt_filter(ctg_norm) <- "-drop_z_below 0" # Ignoramos los puntos con cota por debajo de cero
 opt_output_files(ctg_norm) <- paste0(dir,"/temp/", "{*}_mds")
 mdv <- grid_canopy(ctg_norm, 1, pitfree(c(0,2,5,10,15), c(0,1), subcircle = 0.2))
@@ -138,7 +140,7 @@ plot(mdv)
 
 ```
 
-## Métodos de masa
+## Recorte de las parcelas de campo en la nube de puntos LiDAR
 
 Para comenzar cargaremos los puntos de muestreo efectuados en campo:
 
@@ -155,11 +157,19 @@ Para recortar estas parcelas de la nube de puntos podemos usar el comando `plot_
 ```{r clipdata, eval = FALSE}
 tiles_norm <- list.files(paste(dir, "temp/", sep=""), full.names = TRUE, pattern = "(.*)norm.las$")
 ctg_norm <- readLAScatalog(tiles_norm)
+```
+
+## Cálculo de los estadísticos descriptivos LiDAR en las parcelas de campo
+
+```{r plotstats, eval = FALSE}
 stats <- plot_metrics(ctg_norm, .stdmetrics_z, plots, radius = 9)
 head(stats)
 ```
 
+## Ajuste de los modelos de transición por estrato
+
 Cargamos los datos medidos en las parcelas y se lo añadimos a los datos lidar. A continuación realizamos un análisis de correlación entre las variables de la nube de puntos y la futura variable dependiente (en este caso `vcc`).
+
 
 Se define por correlación a la dirección y magnitud de la asociación entre dos variables cuantitativas, es decir que grado de relación hay entre ellas y si el aumento o disminución de una provoca el aumento o disminución de la otra.
 
@@ -226,6 +236,10 @@ shapiro.test(residuals(lm))
 bptest(lm)
 ```
 
+
+
+## Cálculo de los estadísticos descriptivos LiDAR en todo el monte
+
 Calculamos los estadísticos de los recintos. El radio de nuestras parcelas es de 9 metros, por lo que la superficie es de 254.469004941 m2 y esto implica una resolución de 15.95208
 
 ```{r gridmetrics, eval = FALSE}
@@ -234,11 +248,20 @@ pixel <- sqrt(pi*9^2)
 metrics <- grid_metrics(ctg_norm, .stdmetrics_z, res = pixel)
 
 plot(metrics$zq90)
+```
+
+## Aplicación de los modelos de transición 
+
+```{r ABA_results, eval = FALSE}
 vcc_pred <- -899.025+73.630*metrics$zq90
 plot(vcc_pred)
 
 writeRaster(vcc_pred, paste(dir, "/temp/", "vcc_pred.tif", sep=""), datatype='FLT4S',overwrite = TRUE, bylayer = FALSE)
 ```
+
+
+
+
 
 ## Segmentación de árboles
 
