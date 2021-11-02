@@ -72,8 +72,9 @@ Un sistema LiDAR aerotransportado se compone, fundamentalmente de los siguientes
 
 <center>
 
-[![Sistema LiDAR aerotransportado. Imagen: http://dielmo.com/](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/lidar-aerotransportado-01.jpg "Sistema LiDAR aerotransportado. Imagen: http://dielmo.com/")](http://dielmo.com/) Sistema LiDAR aerotransportado. Fuente: <http://dielmo.com/>
+[![Sistema LiDAR aerotransportado. Imagen: http://dielmo.com/](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/lidar-aerotransportado-01.jpg "Sistema LiDAR aerotransportado. Imagen: http://dielmo.com/")](http://dielmo.com/) 
 
+Sistema LiDAR aerotransportado. Fuente: http://dielmo.com/
 </center>
 
 ## El dato LiDAR
@@ -84,7 +85,7 @@ Muy sintéticamente, podemos conocer la altitud de los objetos gracias a que es 
 
 El escaneo del terreno se puede realizar de muy diversas formas y generalmente se adapta a las características del mismo. Por otro lado, la cantidad de puntos que obtenemos del terreno se denomina densidad de escaneo, en términos de puntos/m^2^ del terreno[^lidar-1] y es relación directa de:
 
-[^lidar-1]: Desde su creación, existen diversos formatos de archivo `*.las`, siendo el más actual LAS 1.4 que fue aprobado en noviembre de 2011 por la ASPRS ([https://www.asprs.org/divisions-committees/lidar-division/laser-las-file-format-exchange-activities)](https://www.asprs.org/divisions-committees/lidar-division/laser-las-file-format-exchange-activities).)
+[^lidar-1]: Debemos entender esta densidad en términos de ocurrencia media, es decir, si hablamos de 2 puntos por metro cuadrado, las más de las veces, un metro cuadrado del terreno contará con dos o más puntos LiDAR. 
 
 -   la velocidad de vuelo, altura de vuelo respecto al terreno,
 -   ángulo de escaneo o FOV (Field of View) y
@@ -96,6 +97,16 @@ El escaneo del terreno se puede realizar de muy diversas formas y generalmente s
 
 </center>
 
+En relación a lo anterior, no debemos confundir la densidad de puntos con el espaciado de los mismos, es decir la distancia entre dos puntos adyacentes. Suponiendo una nube de puntos distribuida regularmente, el espaciado de puntos es la raíz cuadrada del área promedio por punto (el área del polígono dividida por el número de puntos que contiene).
+
+Cada vez que arranquemos un proyecto LíDAR, deberemos preguntarnos con que densidad necesitaremos trabajar. A grandes rasgos:
+
+-   Nubes de puntos de 0,5 a 1 pts/m^2^. Esta resolución es apta para conseguir buena información del terreno a nivel general, como pueden ser modelos digitales de las superficies de grandes territorios.
+-   Nubes de puntos de 1 a 5 pts/m^2^. En este rango podremos comenzar a modelar variables de la superficie como puede ser determinar inundaciones, realizar cálculos hidrológicos o estimar variables forestales en masas ralas o con copas permeables en términos de rodal.
+-   Nubes de puntos de 5 a 10 pts/m^2^. Con esta densidad podremos modelizar más facilmente los recursos forestales en términos de rodal en masas de hoja ancha, con copas menos permeables o más densas. También podremos modelizar edificaciones o elementos del terreno.
+-   Nubes de puntos de más de 10 pts/m^2^. Podremos usar estas nubes de puntos para modelizar en detalle elementos de la superficie y podremos trabajar las estimaciones de recursos forestales a nivel de árbol.
+
+### Capacidad multirretono
 Mención aparte requiere la capacidad multirretorno del sensor LiDAR. En superficies compactas se obtiene un único retorno, es decir, todo el haz de luz es reflejado, pero, en cambio, en superficies "permeables" como puede ser la vegetación el sensor es capaz de registrar varios retornos para un mismo pulso de luz láser ya que éste es reflejado parcialmente por dicha superficie.
 
 <center>
@@ -108,6 +119,7 @@ En el caso del agua, puesto que el láser se encuentra generalmente en el infrar
 
 Al mismo tiempo el sensor registra las intensidades de la señal láser (dado que cada material refleja, "rebota", de manera distinta) con las que se pueden confeccionar imágenes de intensidades y tratarlas de forma similar a las imágenes capturadas con sensores pasivos.
 
+### El fichero `*.las/laz`
 Con todo lo anterior, una vez ejecutemos un escaneo LiDAR del terreno, en concreto con un medio aerotransportado, obtendremos, un fichero binario que generalmente es de extensión `*.las`[^lidar-2] o ya cada vez de forma más frecuente `*.laz` (a grandes rasgos: fichero original comprimido mediante el algoritmo `zip`) que contendrá al menos los siguientes datos por retorno:
 
 [^lidar-2]: Desde su creación, existen diversos formatos de archivo `*.las`, siendo el más actual LAS 1.4 que fue aprobado en noviembre de 2011 por la ASPRS ([https://www.asprs.org/divisions-committees/lidar-division/laser-las-file-format-exchange-activities)](https://www.asprs.org/divisions-committees/lidar-division/laser-las-file-format-exchange-activities).)
@@ -186,7 +198,9 @@ Mediante muy diversos algoritmos podremos "descubrir" sobre que tipo de objeto h
 
 <center>
 
-![](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/puntos_clasificados2.png "Nube de puntos clasificada. Fuente: ign.es") Fuente: ign.es
+![](https://raw.githubusercontent.com/juliomsevilla/rlidar/main/images/puntos_clasificados2.png "Nube de puntos clasificada. Fuente: ign.es") 
+
+Fuente: ign.es
 
 </center>
 

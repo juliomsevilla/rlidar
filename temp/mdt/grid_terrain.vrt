@@ -1,0 +1,80 @@
+<VRTDataset rasterXSize="1196" rasterYSize="751">
+  <SRS dataAxisToSRSAxisMapping="1,2">PROJCS["ETRS89 / UTM zone 30N",GEOGCS["ETRS89",DATUM["European_Terrestrial_Reference_System_1989",SPHEROID["GRS 1980",6378137,298.257222101,AUTHORITY["EPSG","7019"]],AUTHORITY["EPSG","6258"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4258"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-3],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","25830"]]</SRS>
+  <GeoTransform> 5.9907600000000000e+005, 1.0000000000000000e+000, 0.0000000000000000e+000, 4.7353390000000000e+006, 0.0000000000000000e+000,-1.0000000000000000e+000</GeoTransform>
+  <VRTRasterBand dataType="Float32" band="1">
+    <NoDataValue>-999999</NoDataValue>
+    <ColorInterp>Gray</ColorInterp>
+    <ComplexSource>
+      <SourceFilename relativeToVRT="1">tile_1_dtm.tif</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="240" RasterYSize="42" DataType="Float32" BlockXSize="240" BlockYSize="8" />
+      <SrcRect xOff="0" yOff="0" xSize="240" ySize="42" />
+      <DstRect xOff="11" yOff="209" xSize="240" ySize="42" />
+      <NODATA>-999999</NODATA>
+    </ComplexSource>
+    <ComplexSource>
+      <SourceFilename relativeToVRT="1">tile_2_dtm.tif</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="251" RasterYSize="251" DataType="Float32" BlockXSize="251" BlockYSize="8" />
+      <SrcRect xOff="0" yOff="0" xSize="251" ySize="251" />
+      <DstRect xOff="0" yOff="250" xSize="251" ySize="251" />
+      <NODATA>-999999</NODATA>
+    </ComplexSource>
+    <ComplexSource>
+      <SourceFilename relativeToVRT="1">tile_3_dtm.tif</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="129" RasterYSize="198" DataType="Float32" BlockXSize="129" BlockYSize="15" />
+      <SrcRect xOff="0" yOff="0" xSize="129" ySize="198" />
+      <DstRect xOff="122" yOff="500" xSize="129" ySize="198" />
+      <NODATA>-999999</NODATA>
+    </ComplexSource>
+    <ComplexSource>
+      <SourceFilename relativeToVRT="1">tile_4_dtm.tif</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="251" RasterYSize="266" DataType="Float32" BlockXSize="251" BlockYSize="8" />
+      <SrcRect xOff="0" yOff="0" xSize="251" ySize="266" />
+      <DstRect xOff="250" yOff="235" xSize="251" ySize="266" />
+      <NODATA>-999999</NODATA>
+    </ComplexSource>
+    <ComplexSource>
+      <SourceFilename relativeToVRT="1">tile_5_dtm.tif</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="220" RasterYSize="251" DataType="Float32" BlockXSize="220" BlockYSize="9" />
+      <SrcRect xOff="0" yOff="0" xSize="220" ySize="251" />
+      <DstRect xOff="250" yOff="500" xSize="220" ySize="251" />
+      <NODATA>-999999</NODATA>
+    </ComplexSource>
+    <ComplexSource>
+      <SourceFilename relativeToVRT="1">tile_6_dtm.tif</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="251" RasterYSize="356" DataType="Float32" BlockXSize="251" BlockYSize="8" />
+      <SrcRect xOff="0" yOff="0" xSize="251" ySize="356" />
+      <DstRect xOff="500" yOff="137" xSize="251" ySize="356" />
+      <NODATA>-999999</NODATA>
+    </ComplexSource>
+    <ComplexSource>
+      <SourceFilename relativeToVRT="1">tile_7_dtm.tif</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="251" RasterYSize="251" DataType="Float32" BlockXSize="251" BlockYSize="8" />
+      <SrcRect xOff="0" yOff="0" xSize="251" ySize="251" />
+      <DstRect xOff="750" yOff="0" xSize="251" ySize="251" />
+      <NODATA>-999999</NODATA>
+    </ComplexSource>
+    <ComplexSource>
+      <SourceFilename relativeToVRT="1">tile_8_dtm.tif</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="251" RasterYSize="94" DataType="Float32" BlockXSize="251" BlockYSize="8" />
+      <SrcRect xOff="0" yOff="0" xSize="251" ySize="94" />
+      <DstRect xOff="750" yOff="250" xSize="251" ySize="94" />
+      <NODATA>-999999</NODATA>
+    </ComplexSource>
+    <ComplexSource>
+      <SourceFilename relativeToVRT="1">tile_9_dtm.tif</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="196" RasterYSize="252" DataType="Float32" BlockXSize="196" BlockYSize="10" />
+      <SrcRect xOff="0" yOff="0" xSize="196" ySize="252" />
+      <DstRect xOff="1000" yOff="0" xSize="196" ySize="252" />
+      <NODATA>-999999</NODATA>
+    </ComplexSource>
+  </VRTRasterBand>
+</VRTDataset>
